@@ -1,2 +1,29 @@
 envs/
 .python-version
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Python / Unit test / coverage reports
+htmlcov/
+.coverage
+.pytest_cache/
+__pycache__/
+
+# pyenv
+.python-version
+
+# Environments
+.env
+.venv/
+
+# mkdocs documentation
+site/
+
+# VSCode project settings
+.vscode/
+
+#data changes
+data/
+
+requirements.txt
