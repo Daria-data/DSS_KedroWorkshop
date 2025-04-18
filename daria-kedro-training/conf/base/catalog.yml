@@ -1,0 +1,12 @@
+train_df:
+  type: pandas.CSVDataset
+  filepath: data/01_raw/train.csv
+
+train_df_head:
+  type: pandas.CSVDataset
+  filepath: data/01_raw/train_head.csv
+  save_args:
+    index: False# Here you can define all your datasets by using simple YAML syntax.
+#
+# Documentation for this file format can be found in "The Data Catalog"
+# Link: https://docs.kedro.org/en/stable/data/data_catalog.html

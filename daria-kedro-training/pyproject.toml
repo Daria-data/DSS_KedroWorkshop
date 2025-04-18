@@ -1,0 +1,41 @@
+[build-system]
+requires = [ "setuptools",]
+build-backend = "setuptools.build_meta"
+
+[project]
+requires-python = ">=3.9"
+name = "daria_kedro_training"
+readme = "README.md"
+dynamic = [ "version",]
+dependencies = [
+ "ipython>=8.10",
+ "jupyterlab>=3.0",
+ "notebook",
+ "kedro~=0.19.12",
+ "kedro-viz>=7.1",
+ "kedro-datasets>=4.1.0",
+ "kedro-telemetry>=0.6.2",
+]
+
+[project.scripts]
+daria-kedro-training = "daria_kedro_training.__main__:main"
+
+[tool.kedro]
+package_name = "daria_kedro_training"
+project_name = "daria_kedro_training"
+kedro_init_version = "0.19.12"
+tools = "['Data Structure']"
+example_pipeline = "False"
+source_dir = "src"
+
+[project.entry-points."kedro.hooks"]
+
+[tool.setuptools.dynamic.version]
+attr = "daria_kedro_training.__version__"
+
+[tool.setuptools.packages.find]
+where = [ "src",]
+namespaces = false
+
+[tool.kedro_telemetry]
+project_id = "54d74e9503554852a665ac350bd137a4"
