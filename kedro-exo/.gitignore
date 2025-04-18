@@ -4,19 +4,23 @@
 # ignore all local configuration
 conf/local/**
 !conf/local/.gitkeep
-.telemetry
 
 # ignore potentially sensitive credentials files
 conf/**/*credentials*
 
-# # ignore everything in the following folders
-# data/**
+# ignore everything in the following folders
+#data/**
 
-# # except their sub-folders
-# !data/**/
+# except their sub-folders
+#!data/**/
 
 # also keep all .gitkeep files
 !.gitkeep
+
+# also keep the example dataset
+# !data/01_raw/companies.csv
+# !data/01_raw/reviews.csv
+# !data/01_raw/shuttles.xlsx
 
 # ignore kedro-viz metadata
 .viz
@@ -129,10 +133,6 @@ target/
 # Jupyter Notebook
 .ipynb_checkpoints
 
-# IPython
-.ipython/profile_default/history.sqlite
-.ipython/profile_default/startup/README
-
 # pyenv
 .python-version
 
@@ -144,7 +144,6 @@ celerybeat-schedule
 
 # Environments
 .env
-.envrc
 .venv
 env/
 venv/

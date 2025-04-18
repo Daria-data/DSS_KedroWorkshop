@@ -24,6 +24,6 @@ site/
 .vscode/
 
 #data changes
-data/
+#data/
 
 requirements.txt
