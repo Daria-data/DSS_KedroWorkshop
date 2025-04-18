@@ -1,0 +1,13 @@
+# raw passengers file, straight from the notebook
+raw_train:
+  type: pandas.CSVDataset
+  filepath: data/01_raw/train.csv         
+  load_args:
+    encoding: utf-8                       
+
+# cleaned file produced by the data_preparation pipeline
+clean_train:
+  type: pandas.CSVDataset
+  filepath: data/02_intermediate/train_clean.csv
+  save_args:
+    index: false       # don't write DataFrame index
