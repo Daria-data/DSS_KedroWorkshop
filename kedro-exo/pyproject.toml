@@ -16,7 +16,9 @@ dependencies = [
     "kedro-viz>=6.7.0",
     "scikit-learn~=1.5.1",
     "seaborn~=0.12.1",
-    "setuptools; python_version >= '3.12'"
+    "setuptools; python_version >= '3.12'",
+    "lightgbm>=4.6.0",
+    "optuna>=4.3.0",
 ]
 
 [project.scripts]

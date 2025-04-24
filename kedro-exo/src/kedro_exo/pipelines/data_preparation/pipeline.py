@@ -1,8 +1,3 @@
-"""
-This is a boilerplate pipeline 'data_preparation'
-generated using Kedro 0.19.12
-"""
-
 from kedro.pipeline import Pipeline, node, pipeline #noqa
 
 from .nodes import (
@@ -10,7 +5,6 @@ from .nodes import (
     fill_missing,
     drop_unused_cols,
 )
-
 
 def create_pipeline(**kwargs) -> Pipeline:
     """Build the data-preparation pipeline.
