@@ -1,0 +1,94 @@
+raw_train:
+  type: pandas.CSVDataset
+  filepath: data/01_raw/train.csv
+  load_args:
+    encoding: utf-8
+
+clean_train:            
+  type: pandas.CSVDataset
+  filepath: data/02_intermediate/train_clean.csv
+  save_args:
+    index: false
+
+model_training.X_train:
+  type: pandas.CSVDataset
+  filepath: data/05_model_input/X_train.csv
+  save_args: {index: false}
+
+model_training.y_train:
+  type: pandas.CSVDataset
+  filepath: data/05_model_input/y_train.csv
+  save_args: {index: false}
+
+model_training.X_val:
+  type: pandas.CSVDataset
+  filepath: data/05_model_input/X_val.csv
+  save_args: {index: false}
+
+model_training.y_val:
+  type: pandas.CSVDataset
+  filepath: data/05_model_input/y_val.csv
+  save_args: {index: false}
+
+model_training.X_test:
+  type: pandas.CSVDataset
+  filepath: data/05_model_input/X_test.csv
+  save_args: {index: false}
+
+model_training.y_test:
+  type: pandas.CSVDataset
+  filepath: data/05_model_input/y_test.csv
+  save_args: {index: false}
+
+model_training.best_params:
+  type: json.JSONDataset
+  filepath: data/05_model_input/best_params.json
+  save_args: {indent: 2}
+
+best_model:        # already external 
+  type: pickle.PickleDataset
+  filepath: data/06_models/best_model.pkl
+
+val_accuracy:
+  type: json.JSONDataset
+  filepath: data/08_reporting/val_accuracy.json
+  save_args: {indent: 2}
+
+X_test:
+  type: pandas.CSVDataset
+  filepath: data/05_model_input/X_test.csv
+
+y_test:
+  type: pandas.CSVDataset
+  filepath: data/05_model_input/y_test.csv
+
+# ───────── model_evaluation outputs ─────────
+cm:
+  type: pickle.PickleDataset
+  filepath: data/07_evaluation/confusion_matrix.pkl
+
+auc_score:
+  type: json.JSONDataset
+  filepath: data/07_evaluation/auc_score.json
+  save_args:
+    indent: 2
+
+confusion_matrix_plot:
+  type: matplotlib.MatplotlibWriter
+  filepath: data/08_reporting/confusion_matrix.png
+
+roc_curve_plot:
+  type: matplotlib.MatplotlibWriter
+  filepath: data/08_reporting/roc_curve.png
+
+shap_values:
+  type: pickle.PickleDataset
+  filepath: data/07_evaluation/shap_values.pkl
+
+shap_summary_plot:
+  type: matplotlib.MatplotlibWriter
+  filepath: data/08_reporting/shap_summary.png
+
+shap_bar_plot:
+  type: matplotlib.MatplotlibWriter
+  filepath: data/08_reporting/shap_bar.png
