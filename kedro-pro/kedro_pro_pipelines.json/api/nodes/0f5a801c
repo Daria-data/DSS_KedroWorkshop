@@ -1,0 +1,40 @@
+{
+  "type": "pandas.csv_dataset.CSVDataset",
+  "filepath": "C:/Users/d.antipova/Documents/DSS_KedroWorkshop/kedro-pro/data/05_model_input/y_train.csv",
+  "run_command": "kedro run --to-outputs=model_training.y_train",
+  "preview": {
+    "index": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "columns": [
+      "Transported"
+    ],
+    "data": [
+      [
+        false
+      ],
+      [
+        true
+      ],
+      [
+        true
+      ],
+      [
+        true
+      ],
+      [
+        false
+      ]
+    ]
+  },
+  "preview_type": "TablePreview",
+  "stats": {
+    "rows": 6280,
+    "columns": 1,
+    "file_size": 47056
+  }
+}

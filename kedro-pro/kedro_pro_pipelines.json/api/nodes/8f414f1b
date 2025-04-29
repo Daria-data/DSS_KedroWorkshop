@@ -1,0 +1,17 @@
+{
+  "code": "def split_data(\n    df: pd.DataFrame,\n) -> tuple[pd.DataFrame, pd.Series, pd.DataFrame, pd.Series, pd.DataFrame, pd.Series]:\n    \"\"\"Split the cleaned dataset into training, validation and test sets.\n\n    The function:\n    1. Holds out 15 % of the data for the final test set.\n    2. Splits the remaining data into training and validation\n       using the same 15 % fraction.\n    3. Keeps the random state fixed to ensure reproducibility.\n\n    Returns:\n        X_train, y_train, X_val, y_val, X_test, y_test\n    \"\"\"\n    TEST_SIZE = 0.15\n    RANDOM_STATE = 42\n\n    X = df.drop(columns=[\"Transported\"])\n    y = df[\"Transported\"]\n\n    # Step 1 – test split\n    X_train_val, X_test, y_train_val, y_test = train_test_split(\n        X, y, test_size=TEST_SIZE, random_state=RANDOM_STATE\n    )\n\n    # Step 2 – validation split\n    X_train, X_val, y_train, y_val = train_test_split(\n        X_train_val,\n        y_train_val,\n        test_size=TEST_SIZE,\n        random_state=RANDOM_STATE,\n    )\n    return X_train, y_train, X_val, y_val, X_test, y_test\n",
+  "filepath": "kedro-pro\\src\\kedro_pro\\pipelines\\model_training\\nodes.py",
+  "parameters": {},
+  "run_command": "kedro run --to-nodes='model_training.split_data'",
+  "inputs": [
+    "clean_train"
+  ],
+  "outputs": [
+    "model_training.X_train",
+    "model_training.y_train",
+    "model_training.X_val",
+    "model_training.y_val",
+    "X_test",
+    "y_test"
+  ]
+}

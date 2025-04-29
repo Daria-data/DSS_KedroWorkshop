@@ -1,0 +1,1454 @@
+{
+  "nodes": [
+    {
+      "id": "06e71861",
+      "name": "add_cabin_features",
+      "tags": [],
+      "pipelines": [
+        "data_preparation",
+        "__default__"
+      ],
+      "type": "task",
+      "modular_pipelines": [
+        "data_preparation_pipeline"
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "8abbb201",
+      "name": "raw_train",
+      "tags": [],
+      "pipelines": [
+        "data_preparation",
+        "__default__"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "data_preparation_pipeline"
+      ],
+      "layer": "raw",
+      "dataset_type": "pandas.csv_dataset.CSVDataset",
+      "stats": {
+        "rows": 8693,
+        "columns": 14,
+        "file_size": 814115
+      }
+    },
+    {
+      "id": "bb55be70",
+      "name": "data_preparation_pipeline.df_with_cabin",
+      "tags": [],
+      "pipelines": [
+        "data_preparation",
+        "__default__"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "data_preparation_pipeline"
+      ],
+      "layer": null,
+      "dataset_type": "io.memory_dataset.MemoryDataset",
+      "stats": {
+        "rows": 8693,
+        "columns": 16
+      }
+    },
+    {
+      "id": "49283fe0",
+      "name": "define_feature_columns",
+      "tags": [
+        "features"
+      ],
+      "pipelines": [
+        "model_training",
+        "__default__"
+      ],
+      "type": "task",
+      "modular_pipelines": [
+        "model_training"
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "c830ef90",
+      "name": "model_training.cat_columns",
+      "tags": [
+        "preprocess",
+        "features"
+      ],
+      "pipelines": [
+        "model_training",
+        "__default__"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "model_training"
+      ],
+      "layer": null,
+      "dataset_type": "io.memory_dataset.MemoryDataset",
+      "stats": null
+    },
+    {
+      "id": "b9cff30f",
+      "name": "model_training.num_columns",
+      "tags": [
+        "preprocess",
+        "features"
+      ],
+      "pipelines": [
+        "model_training",
+        "__default__"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "model_training"
+      ],
+      "layer": null,
+      "dataset_type": "io.memory_dataset.MemoryDataset",
+      "stats": null
+    },
+    {
+      "id": "f24f3c79",
+      "name": "fill_missing_values",
+      "tags": [],
+      "pipelines": [
+        "data_preparation",
+        "__default__"
+      ],
+      "type": "task",
+      "modular_pipelines": [
+        "data_preparation_pipeline"
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "c07504ae",
+      "name": "data_preparation_pipeline.df_filled",
+      "tags": [],
+      "pipelines": [
+        "data_preparation",
+        "__default__"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "data_preparation_pipeline"
+      ],
+      "layer": null,
+      "dataset_type": "io.memory_dataset.MemoryDataset",
+      "stats": {
+        "rows": 8693,
+        "columns": 16
+      }
+    },
+    {
+      "id": "85d69afc",
+      "name": "make_feature_pipeline",
+      "tags": [
+        "preprocess"
+      ],
+      "pipelines": [
+        "model_training",
+        "__default__"
+      ],
+      "type": "task",
+      "modular_pipelines": [
+        "model_training"
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "2e20a8c4",
+      "name": "model_training.feature_engineering",
+      "tags": [
+        "preprocess",
+        "tuning",
+        "train"
+      ],
+      "pipelines": [
+        "model_training",
+        "__default__"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "model_training"
+      ],
+      "layer": null,
+      "dataset_type": "io.memory_dataset.MemoryDataset",
+      "stats": null
+    },
+    {
+      "id": "66c5ac27",
+      "name": "drop_unused_columns",
+      "tags": [],
+      "pipelines": [
+        "data_preparation",
+        "__default__"
+      ],
+      "type": "task",
+      "modular_pipelines": [
+        "data_preparation_pipeline"
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "0e7db813",
+      "name": "clean_train",
+      "tags": [
+        "split"
+      ],
+      "pipelines": [
+        "data_preparation",
+        "model_training",
+        "__default__"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "data_preparation_pipeline",
+        "model_training"
+      ],
+      "layer": "intermediate",
+      "dataset_type": "pandas.csv_dataset.CSVDataset",
+      "stats": {
+        "rows": 8693,
+        "columns": 13,
+        "file_size": 594646
+      }
+    },
+    {
+      "id": "8f414f1b",
+      "name": "split_data",
+      "tags": [
+        "split"
+      ],
+      "pipelines": [
+        "model_training",
+        "__default__"
+      ],
+      "type": "task",
+      "modular_pipelines": [
+        "model_training"
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "7e3461be",
+      "name": "model_training.X_train",
+      "tags": [
+        "train",
+        "tuning",
+        "split"
+      ],
+      "pipelines": [
+        "model_training",
+        "__default__"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "model_training"
+      ],
+      "layer": "model inputs",
+      "dataset_type": "pandas.csv_dataset.CSVDataset",
+      "stats": {
+        "rows": 6280,
+        "columns": 12,
+        "file_size": 394897
+      }
+    },
+    {
+      "id": "0f5a801c",
+      "name": "model_training.y_train",
+      "tags": [
+        "train",
+        "tuning",
+        "split"
+      ],
+      "pipelines": [
+        "model_training",
+        "__default__"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "model_training"
+      ],
+      "layer": "model inputs",
+      "dataset_type": "pandas.csv_dataset.CSVDataset",
+      "stats": {
+        "rows": 6280,
+        "columns": 1,
+        "file_size": 47056
+      }
+    },
+    {
+      "id": "01e9ec4f",
+      "name": "model_training.X_val",
+      "tags": [
+        "train",
+        "tuning",
+        "split"
+      ],
+      "pipelines": [
+        "model_training",
+        "__default__"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "model_training"
+      ],
+      "layer": "model inputs",
+      "dataset_type": "pandas.csv_dataset.CSVDataset",
+      "stats": {
+        "rows": 1109,
+        "columns": 12,
+        "file_size": 70142
+      }
+    },
+    {
+      "id": "29ee9b4b",
+      "name": "model_training.y_val",
+      "tags": [
+        "train",
+        "tuning",
+        "split"
+      ],
+      "pipelines": [
+        "model_training",
+        "__default__"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "model_training"
+      ],
+      "layer": "model inputs",
+      "dataset_type": "pandas.csv_dataset.CSVDataset",
+      "stats": {
+        "rows": 1109,
+        "columns": 1,
+        "file_size": 8353
+      }
+    },
+    {
+      "id": "872981f9",
+      "name": "X_test",
+      "tags": [
+        "prep",
+        "split"
+      ],
+      "pipelines": [
+        "model_training",
+        "model_evaluation",
+        "__default__"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "model_training",
+        "model_evaluation"
+      ],
+      "layer": "model inputs",
+      "dataset_type": "pandas.csv_dataset.CSVDataset",
+      "stats": {
+        "rows": 1304,
+        "columns": 12,
+        "file_size": 82013
+      }
+    },
+    {
+      "id": "f6d9538c",
+      "name": "y_test",
+      "tags": [
+        "split",
+        "metrics"
+      ],
+      "pipelines": [
+        "model_training",
+        "model_evaluation",
+        "__default__"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "model_training",
+        "model_evaluation"
+      ],
+      "layer": "model inputs",
+      "dataset_type": "pandas.csv_dataset.CSVDataset",
+      "stats": {
+        "rows": 1304,
+        "columns": 1,
+        "file_size": 9799
+      }
+    },
+    {
+      "id": "47e5f5c2",
+      "name": "tune_hyperparameters",
+      "tags": [
+        "tuning"
+      ],
+      "pipelines": [
+        "model_training",
+        "__default__"
+      ],
+      "type": "task",
+      "modular_pipelines": [
+        "model_training"
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "563a8b44",
+      "name": "model_training.best_params",
+      "tags": [
+        "tuning",
+        "train"
+      ],
+      "pipelines": [
+        "model_training",
+        "__default__"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "model_training"
+      ],
+      "layer": "model inputs",
+      "dataset_type": "json.json_dataset.JSONDataset",
+      "stats": null
+    },
+    {
+      "id": "b1584e2a",
+      "name": "train_final_model",
+      "tags": [
+        "train"
+      ],
+      "pipelines": [
+        "model_training",
+        "__default__"
+      ],
+      "type": "task",
+      "modular_pipelines": [
+        "model_training"
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "2eb16f79",
+      "name": "best_model",
+      "tags": [
+        "prep",
+        "train"
+      ],
+      "pipelines": [
+        "model_training",
+        "model_evaluation",
+        "__default__"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "model_training",
+        "model_evaluation"
+      ],
+      "layer": "model",
+      "dataset_type": "pickle.pickle_dataset.PickleDataset",
+      "stats": null
+    },
+    {
+      "id": "29a53765",
+      "name": "val_accuracy",
+      "tags": [
+        "train"
+      ],
+      "pipelines": [
+        "model_training",
+        "__default__"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "model_training"
+      ],
+      "layer": "reporting",
+      "dataset_type": "json.json_dataset.JSONDataset",
+      "stats": null
+    },
+    {
+      "id": "5377961a",
+      "name": "transform_test_set",
+      "tags": [
+        "prep"
+      ],
+      "pipelines": [
+        "model_evaluation",
+        "__default__"
+      ],
+      "type": "task",
+      "modular_pipelines": [
+        "model_evaluation"
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "478ec6f1",
+      "name": "model_evaluation.X_test_transformed",
+      "tags": [
+        "metrics",
+        "plot",
+        "prep",
+        "shap"
+      ],
+      "pipelines": [
+        "model_evaluation",
+        "__default__"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "model_evaluation"
+      ],
+      "layer": null,
+      "dataset_type": "io.memory_dataset.MemoryDataset",
+      "stats": {
+        "rows": 1304,
+        "columns": 30
+      }
+    },
+    {
+      "id": "db018a54",
+      "name": "model_evaluation.model",
+      "tags": [
+        "prep",
+        "metrics",
+        "shap"
+      ],
+      "pipelines": [
+        "model_evaluation",
+        "__default__"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "model_evaluation"
+      ],
+      "layer": null,
+      "dataset_type": "io.memory_dataset.MemoryDataset",
+      "stats": null
+    },
+    {
+      "id": "71fb2839",
+      "name": "interpret_model",
+      "tags": [
+        "shap"
+      ],
+      "pipelines": [
+        "model_evaluation",
+        "__default__"
+      ],
+      "type": "task",
+      "modular_pipelines": [
+        "model_evaluation"
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "b990bfdd",
+      "name": "shap_values",
+      "tags": [
+        "plot",
+        "shap"
+      ],
+      "pipelines": [
+        "model_evaluation",
+        "__default__"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "model_evaluation"
+      ],
+      "layer": "evaluation",
+      "dataset_type": "pickle.pickle_dataset.PickleDataset",
+      "stats": null
+    },
+    {
+      "id": "bfc61216",
+      "name": "predict_and_metrics",
+      "tags": [
+        "metrics"
+      ],
+      "pipelines": [
+        "model_evaluation",
+        "__default__"
+      ],
+      "type": "task",
+      "modular_pipelines": [
+        "model_evaluation"
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "e283e1df",
+      "name": "cm",
+      "tags": [
+        "metrics",
+        "plot",
+        "cm"
+      ],
+      "pipelines": [
+        "model_evaluation",
+        "__default__"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "model_evaluation"
+      ],
+      "layer": "evaluation",
+      "dataset_type": "pickle.pickle_dataset.PickleDataset",
+      "stats": null
+    },
+    {
+      "id": "9983417b",
+      "name": "auc_score",
+      "tags": [
+        "metrics",
+        "plot",
+        "roc"
+      ],
+      "pipelines": [
+        "model_evaluation",
+        "__default__"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "model_evaluation"
+      ],
+      "layer": "evaluation",
+      "dataset_type": "json.json_dataset.JSONDataset",
+      "stats": null
+    },
+    {
+      "id": "931cbf1c",
+      "name": "model_evaluation.fpr",
+      "tags": [
+        "metrics",
+        "plot",
+        "roc"
+      ],
+      "pipelines": [
+        "model_evaluation",
+        "__default__"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "model_evaluation"
+      ],
+      "layer": null,
+      "dataset_type": "io.memory_dataset.MemoryDataset",
+      "stats": null
+    },
+    {
+      "id": "80fd6c20",
+      "name": "model_evaluation.tpr",
+      "tags": [
+        "metrics",
+        "plot",
+        "roc"
+      ],
+      "pipelines": [
+        "model_evaluation",
+        "__default__"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "model_evaluation"
+      ],
+      "layer": null,
+      "dataset_type": "io.memory_dataset.MemoryDataset",
+      "stats": null
+    },
+    {
+      "id": "a1c0b25d",
+      "name": "plot_confusion_matrix",
+      "tags": [
+        "plot",
+        "cm"
+      ],
+      "pipelines": [
+        "model_evaluation",
+        "__default__"
+      ],
+      "type": "task",
+      "modular_pipelines": [
+        "model_evaluation"
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "af40a5b1",
+      "name": "confusion_matrix_plot",
+      "tags": [
+        "plot",
+        "cm"
+      ],
+      "pipelines": [
+        "model_evaluation",
+        "__default__"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "model_evaluation"
+      ],
+      "layer": "reporting",
+      "dataset_type": "matplotlib.matplotlib_writer.MatplotlibWriter",
+      "stats": null
+    },
+    {
+      "id": "e4b6aff3",
+      "name": "plot_roc_curve",
+      "tags": [
+        "roc",
+        "plot"
+      ],
+      "pipelines": [
+        "model_evaluation",
+        "__default__"
+      ],
+      "type": "task",
+      "modular_pipelines": [
+        "model_evaluation"
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "ac01263d",
+      "name": "roc_curve_plot",
+      "tags": [
+        "roc",
+        "plot"
+      ],
+      "pipelines": [
+        "model_evaluation",
+        "__default__"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "model_evaluation"
+      ],
+      "layer": "reporting",
+      "dataset_type": "matplotlib.matplotlib_writer.MatplotlibWriter",
+      "stats": null
+    },
+    {
+      "id": "aabbd10d",
+      "name": "shap_bar_plot",
+      "tags": [
+        "plot",
+        "shap"
+      ],
+      "pipelines": [
+        "model_evaluation",
+        "__default__"
+      ],
+      "type": "task",
+      "modular_pipelines": [
+        "model_evaluation"
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "cab8c9da",
+      "name": "shap_bar_plot",
+      "tags": [
+        "plot",
+        "shap"
+      ],
+      "pipelines": [
+        "model_evaluation",
+        "__default__"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "model_evaluation"
+      ],
+      "layer": "reporting",
+      "dataset_type": "matplotlib.matplotlib_writer.MatplotlibWriter",
+      "stats": null
+    },
+    {
+      "id": "84216d71",
+      "name": "shap_summary_plot",
+      "tags": [
+        "plot",
+        "shap"
+      ],
+      "pipelines": [
+        "model_evaluation",
+        "__default__"
+      ],
+      "type": "task",
+      "modular_pipelines": [
+        "model_evaluation"
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "0db3e791",
+      "name": "shap_summary_plot",
+      "tags": [
+        "plot",
+        "shap"
+      ],
+      "pipelines": [
+        "model_evaluation",
+        "__default__"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "model_evaluation"
+      ],
+      "layer": "reporting",
+      "dataset_type": "matplotlib.matplotlib_writer.MatplotlibWriter",
+      "stats": null
+    },
+    {
+      "id": "data_preparation_pipeline",
+      "name": "data_preparation_pipeline",
+      "tags": [],
+      "pipelines": [
+        "__default__"
+      ],
+      "type": "modularPipeline",
+      "modular_pipelines": null,
+      "layer": null,
+      "dataset_type": null,
+      "stats": null
+    },
+    {
+      "id": "model_evaluation",
+      "name": "model_evaluation",
+      "tags": [
+        "metrics",
+        "plot",
+        "cm",
+        "roc",
+        "prep",
+        "shap"
+      ],
+      "pipelines": [
+        "__default__"
+      ],
+      "type": "modularPipeline",
+      "modular_pipelines": null,
+      "layer": null,
+      "dataset_type": null,
+      "stats": null
+    },
+    {
+      "id": "model_training",
+      "name": "model_training",
+      "tags": [
+        "preprocess",
+        "split",
+        "train",
+        "features",
+        "tuning"
+      ],
+      "pipelines": [
+        "__default__"
+      ],
+      "type": "modularPipeline",
+      "modular_pipelines": null,
+      "layer": null,
+      "dataset_type": null,
+      "stats": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "01e9ec4f",
+      "target": "47e5f5c2"
+    },
+    {
+      "source": "c07504ae",
+      "target": "66c5ac27"
+    },
+    {
+      "source": "49283fe0",
+      "target": "c830ef90"
+    },
+    {
+      "source": "db018a54",
+      "target": "bfc61216"
+    },
+    {
+      "source": "bfc61216",
+      "target": "e283e1df"
+    },
+    {
+      "source": "0e7db813",
+      "target": "8f414f1b"
+    },
+    {
+      "source": "5377961a",
+      "target": "478ec6f1"
+    },
+    {
+      "source": "0e7db813",
+      "target": "model_training"
+    },
+    {
+      "source": "85d69afc",
+      "target": "2e20a8c4"
+    },
+    {
+      "source": "b9cff30f",
+      "target": "85d69afc"
+    },
+    {
+      "source": "e4b6aff3",
+      "target": "ac01263d"
+    },
+    {
+      "source": "db018a54",
+      "target": "71fb2839"
+    },
+    {
+      "source": "model_training",
+      "target": "872981f9"
+    },
+    {
+      "source": "8f414f1b",
+      "target": "f6d9538c"
+    },
+    {
+      "source": "b990bfdd",
+      "target": "aabbd10d"
+    },
+    {
+      "source": "model_evaluation",
+      "target": "af40a5b1"
+    },
+    {
+      "source": "29ee9b4b",
+      "target": "47e5f5c2"
+    },
+    {
+      "source": "model_training",
+      "target": "2eb16f79"
+    },
+    {
+      "source": "f6d9538c",
+      "target": "model_evaluation"
+    },
+    {
+      "source": "bfc61216",
+      "target": "9983417b"
+    },
+    {
+      "source": "b990bfdd",
+      "target": "84216d71"
+    },
+    {
+      "source": "7e3461be",
+      "target": "47e5f5c2"
+    },
+    {
+      "source": "2e20a8c4",
+      "target": "47e5f5c2"
+    },
+    {
+      "source": "8abbb201",
+      "target": "data_preparation_pipeline"
+    },
+    {
+      "source": "bb55be70",
+      "target": "f24f3c79"
+    },
+    {
+      "source": "8f414f1b",
+      "target": "7e3461be"
+    },
+    {
+      "source": "f24f3c79",
+      "target": "c07504ae"
+    },
+    {
+      "source": "0f5a801c",
+      "target": "b1584e2a"
+    },
+    {
+      "source": "b1584e2a",
+      "target": "29a53765"
+    },
+    {
+      "source": "872981f9",
+      "target": "5377961a"
+    },
+    {
+      "source": "49283fe0",
+      "target": "b9cff30f"
+    },
+    {
+      "source": "71fb2839",
+      "target": "b990bfdd"
+    },
+    {
+      "source": "478ec6f1",
+      "target": "bfc61216"
+    },
+    {
+      "source": "2eb16f79",
+      "target": "5377961a"
+    },
+    {
+      "source": "01e9ec4f",
+      "target": "b1584e2a"
+    },
+    {
+      "source": "478ec6f1",
+      "target": "71fb2839"
+    },
+    {
+      "source": "66c5ac27",
+      "target": "0e7db813"
+    },
+    {
+      "source": "47e5f5c2",
+      "target": "563a8b44"
+    },
+    {
+      "source": "bfc61216",
+      "target": "80fd6c20"
+    },
+    {
+      "source": "9983417b",
+      "target": "e4b6aff3"
+    },
+    {
+      "source": "c830ef90",
+      "target": "85d69afc"
+    },
+    {
+      "source": "e283e1df",
+      "target": "a1c0b25d"
+    },
+    {
+      "source": "8f414f1b",
+      "target": "872981f9"
+    },
+    {
+      "source": "8f414f1b",
+      "target": "29ee9b4b"
+    },
+    {
+      "source": "8f414f1b",
+      "target": "01e9ec4f"
+    },
+    {
+      "source": "bfc61216",
+      "target": "931cbf1c"
+    },
+    {
+      "source": "563a8b44",
+      "target": "b1584e2a"
+    },
+    {
+      "source": "80fd6c20",
+      "target": "e4b6aff3"
+    },
+    {
+      "source": "478ec6f1",
+      "target": "aabbd10d"
+    },
+    {
+      "source": "aabbd10d",
+      "target": "cab8c9da"
+    },
+    {
+      "source": "872981f9",
+      "target": "model_evaluation"
+    },
+    {
+      "source": "model_evaluation",
+      "target": "ac01263d"
+    },
+    {
+      "source": "model_evaluation",
+      "target": "cab8c9da"
+    },
+    {
+      "source": "931cbf1c",
+      "target": "e4b6aff3"
+    },
+    {
+      "source": "model_evaluation",
+      "target": "0db3e791"
+    },
+    {
+      "source": "8f414f1b",
+      "target": "0f5a801c"
+    },
+    {
+      "source": "2eb16f79",
+      "target": "model_evaluation"
+    },
+    {
+      "source": "model_training",
+      "target": "29a53765"
+    },
+    {
+      "source": "5377961a",
+      "target": "db018a54"
+    },
+    {
+      "source": "29ee9b4b",
+      "target": "b1584e2a"
+    },
+    {
+      "source": "478ec6f1",
+      "target": "84216d71"
+    },
+    {
+      "source": "data_preparation_pipeline",
+      "target": "0e7db813"
+    },
+    {
+      "source": "06e71861",
+      "target": "bb55be70"
+    },
+    {
+      "source": "0f5a801c",
+      "target": "47e5f5c2"
+    },
+    {
+      "source": "7e3461be",
+      "target": "b1584e2a"
+    },
+    {
+      "source": "2e20a8c4",
+      "target": "b1584e2a"
+    },
+    {
+      "source": "model_training",
+      "target": "f6d9538c"
+    },
+    {
+      "source": "f6d9538c",
+      "target": "bfc61216"
+    },
+    {
+      "source": "a1c0b25d",
+      "target": "af40a5b1"
+    },
+    {
+      "source": "84216d71",
+      "target": "0db3e791"
+    },
+    {
+      "source": "b1584e2a",
+      "target": "2eb16f79"
+    },
+    {
+      "source": "8abbb201",
+      "target": "06e71861"
+    }
+  ],
+  "layers": [
+    "raw",
+    "intermediate",
+    "model inputs",
+    "model",
+    "evaluation",
+    "reporting"
+  ],
+  "tags": [
+    {
+      "id": "cm",
+      "name": "cm"
+    },
+    {
+      "id": "features",
+      "name": "features"
+    },
+    {
+      "id": "metrics",
+      "name": "metrics"
+    },
+    {
+      "id": "plot",
+      "name": "plot"
+    },
+    {
+      "id": "prep",
+      "name": "prep"
+    },
+    {
+      "id": "preprocess",
+      "name": "preprocess"
+    },
+    {
+      "id": "roc",
+      "name": "roc"
+    },
+    {
+      "id": "shap",
+      "name": "shap"
+    },
+    {
+      "id": "split",
+      "name": "split"
+    },
+    {
+      "id": "train",
+      "name": "train"
+    },
+    {
+      "id": "tuning",
+      "name": "tuning"
+    }
+  ],
+  "pipelines": [
+    {
+      "id": "__default__",
+      "name": "__default__"
+    },
+    {
+      "id": "data_preparation",
+      "name": "data_preparation"
+    },
+    {
+      "id": "model_evaluation",
+      "name": "model_evaluation"
+    },
+    {
+      "id": "model_training",
+      "name": "model_training"
+    }
+  ],
+  "modular_pipelines": {
+    "__root__": {
+      "id": "__root__",
+      "name": "__root__",
+      "inputs": [],
+      "outputs": [],
+      "children": [
+        {
+          "id": "0e7db813",
+          "type": "data"
+        },
+        {
+          "id": "29a53765",
+          "type": "data"
+        },
+        {
+          "id": "872981f9",
+          "type": "data"
+        },
+        {
+          "id": "data_preparation_pipeline",
+          "type": "modularPipeline"
+        },
+        {
+          "id": "af40a5b1",
+          "type": "data"
+        },
+        {
+          "id": "0db3e791",
+          "type": "data"
+        },
+        {
+          "id": "model_evaluation",
+          "type": "modularPipeline"
+        },
+        {
+          "id": "2eb16f79",
+          "type": "data"
+        },
+        {
+          "id": "f6d9538c",
+          "type": "data"
+        },
+        {
+          "id": "8abbb201",
+          "type": "data"
+        },
+        {
+          "id": "cab8c9da",
+          "type": "data"
+        },
+        {
+          "id": "model_training",
+          "type": "modularPipeline"
+        },
+        {
+          "id": "ac01263d",
+          "type": "data"
+        }
+      ]
+    },
+    "data_preparation_pipeline": {
+      "id": "data_preparation_pipeline",
+      "name": "data_preparation_pipeline",
+      "inputs": [
+        "8abbb201"
+      ],
+      "outputs": [
+        "0e7db813"
+      ],
+      "children": [
+        {
+          "id": "bb55be70",
+          "type": "data"
+        },
+        {
+          "id": "f24f3c79",
+          "type": "task"
+        },
+        {
+          "id": "c07504ae",
+          "type": "data"
+        },
+        {
+          "id": "66c5ac27",
+          "type": "task"
+        },
+        {
+          "id": "06e71861",
+          "type": "task"
+        }
+      ]
+    },
+    "model_evaluation": {
+      "id": "model_evaluation",
+      "name": "model_evaluation",
+      "inputs": [
+        "f6d9538c",
+        "872981f9",
+        "2eb16f79"
+      ],
+      "outputs": [
+        "af40a5b1",
+        "ac01263d",
+        "cab8c9da",
+        "0db3e791"
+      ],
+      "children": [
+        {
+          "id": "db018a54",
+          "type": "data"
+        },
+        {
+          "id": "5377961a",
+          "type": "task"
+        },
+        {
+          "id": "bfc61216",
+          "type": "task"
+        },
+        {
+          "id": "931cbf1c",
+          "type": "data"
+        },
+        {
+          "id": "e4b6aff3",
+          "type": "task"
+        },
+        {
+          "id": "71fb2839",
+          "type": "task"
+        },
+        {
+          "id": "9983417b",
+          "type": "data"
+        },
+        {
+          "id": "aabbd10d",
+          "type": "task"
+        },
+        {
+          "id": "84216d71",
+          "type": "task"
+        },
+        {
+          "id": "a1c0b25d",
+          "type": "task"
+        },
+        {
+          "id": "e283e1df",
+          "type": "data"
+        },
+        {
+          "id": "b990bfdd",
+          "type": "data"
+        },
+        {
+          "id": "478ec6f1",
+          "type": "data"
+        },
+        {
+          "id": "80fd6c20",
+          "type": "data"
+        }
+      ]
+    },
+    "model_training": {
+      "id": "model_training",
+      "name": "model_training",
+      "inputs": [
+        "0e7db813"
+      ],
+      "outputs": [
+        "f6d9538c",
+        "872981f9",
+        "2eb16f79",
+        "29a53765"
+      ],
+      "children": [
+        {
+          "id": "7e3461be",
+          "type": "data"
+        },
+        {
+          "id": "47e5f5c2",
+          "type": "task"
+        },
+        {
+          "id": "0f5a801c",
+          "type": "data"
+        },
+        {
+          "id": "563a8b44",
+          "type": "data"
+        },
+        {
+          "id": "85d69afc",
+          "type": "task"
+        },
+        {
+          "id": "2e20a8c4",
+          "type": "data"
+        },
+        {
+          "id": "b9cff30f",
+          "type": "data"
+        },
+        {
+          "id": "01e9ec4f",
+          "type": "data"
+        },
+        {
+          "id": "c830ef90",
+          "type": "data"
+        },
+        {
+          "id": "29ee9b4b",
+          "type": "data"
+        },
+        {
+          "id": "b1584e2a",
+          "type": "task"
+        },
+        {
+          "id": "49283fe0",
+          "type": "task"
+        },
+        {
+          "id": "8f414f1b",
+          "type": "task"
+        }
+      ]
+    }
+  },
+  "selected_pipeline": "__default__"
+}

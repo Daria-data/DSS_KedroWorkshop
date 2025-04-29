@@ -1,0 +1,8 @@
+{
+  "type": "json.json_dataset.JSONDataset",
+  "filepath": "C:/Users/d.antipova/Documents/DSS_KedroWorkshop/kedro-pro/data/08_reporting/val_accuracy.json",
+  "run_command": "kedro run --to-outputs=val_accuracy",
+  "preview": "0.8268710550045085",
+  "preview_type": "JSONPreview",
+  "stats": null
+}

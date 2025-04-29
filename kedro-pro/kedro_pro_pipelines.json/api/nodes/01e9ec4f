@@ -1,0 +1,106 @@
+{
+  "type": "pandas.csv_dataset.CSVDataset",
+  "filepath": "C:/Users/d.antipova/Documents/DSS_KedroWorkshop/kedro-pro/data/05_model_input/X_val.csv",
+  "run_command": "kedro run --to-outputs=model_training.X_val",
+  "preview": {
+    "index": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "columns": [
+      "HomePlanet",
+      "CryoSleep",
+      "Destination",
+      "Age",
+      "VIP",
+      "RoomService",
+      "FoodCourt",
+      "ShoppingMall",
+      "Spa",
+      "VRDeck",
+      "Deck",
+      "Side"
+    ],
+    "data": [
+      [
+        "Earth",
+        false,
+        "TRAPPIST-1e",
+        34.0,
+        false,
+        1242.0,
+        444.0,
+        0.0,
+        22.0,
+        0.0,
+        "G",
+        "S"
+      ],
+      [
+        "Earth",
+        true,
+        "55 Cancri e",
+        29.0,
+        false,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        "G",
+        "S"
+      ],
+      [
+        "Earth",
+        false,
+        "55 Cancri e",
+        24.0,
+        false,
+        252.0,
+        0.0,
+        0.0,
+        449.0,
+        0.0,
+        "F",
+        "S"
+      ],
+      [
+        "Europa",
+        false,
+        "55 Cancri e",
+        36.0,
+        false,
+        0.0,
+        1302.0,
+        0.0,
+        2067.0,
+        10173.0,
+        "A",
+        "P"
+      ],
+      [
+        "Europa",
+        true,
+        "TRAPPIST-1e",
+        28.0,
+        false,
+        0.0,
+        null,
+        0.0,
+        0.0,
+        0.0,
+        "C",
+        "P"
+      ]
+    ]
+  },
+  "preview_type": "TablePreview",
+  "stats": {
+    "rows": 1109,
+    "columns": 12,
+    "file_size": 70142
+  }
+}

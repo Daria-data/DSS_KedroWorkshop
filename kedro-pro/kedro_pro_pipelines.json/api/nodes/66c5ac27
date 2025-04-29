@@ -1,0 +1,12 @@
+{
+  "code": "def drop_unused_columns(df: pd.DataFrame) -> pd.DataFrame:\n    \"\"\"Remove columns that are not needed for downstream processing.\n\n    Args:\n        df: Cleaned dataframe.\n\n    Returns:\n        DataFrame without `PassengerId`, `Cabin`, `Name`.\n    \"\"\"\n    return df.drop(columns=[\"PassengerId\", \"Cabin\", \"Name\"])\n",
+  "filepath": "kedro-pro\\src\\kedro_pro\\pipelines\\data_preparation\\nodes.py",
+  "parameters": {},
+  "run_command": "kedro run --to-nodes='data_preparation_pipeline.drop_unused_columns'",
+  "inputs": [
+    "data_preparation_pipeline.df_filled"
+  ],
+  "outputs": [
+    "clean_train"
+  ]
+}

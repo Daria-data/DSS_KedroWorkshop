@@ -1,0 +1,11 @@
+{
+  "code": "def define_feature_columns() -> tuple[list[str], list[str]]:\n    \"\"\"Return the categorical and numerical feature lists.\"\"\"\n    cat_columns = [\n        \"HomePlanet\",\n        \"CryoSleep\",\n        \"Destination\",\n        \"VIP\",\n        \"Deck\",\n        \"Side\",\n    ]\n    num_columns = [\n        \"Age\",\n        \"RoomService\",\n        \"FoodCourt\",\n        \"ShoppingMall\",\n        \"Spa\",\n        \"VRDeck\",\n    ]\n    return cat_columns, num_columns\n",
+  "filepath": "kedro-pro\\src\\kedro_pro\\pipelines\\model_training\\nodes.py",
+  "parameters": {},
+  "run_command": "kedro run --to-nodes='model_training.define_feature_columns'",
+  "inputs": [],
+  "outputs": [
+    "model_training.cat_columns",
+    "model_training.num_columns"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "code": "def train_final_model(  # noqa\n    feature_engineering: ColumnTransformer,\n    X_train: pd.DataFrame,\n    y_train: pd.Series,\n    X_val: pd.DataFrame,\n    y_val: pd.Series,\n    best_params: dict[str, float],\n) -> tuple[Pipeline, float]:\n    \"\"\"Build the final LightGBM pipeline, fit it, and report validation accuracy.\n\n    The pipeline combines the previously created 'feature_engineering'\n    transformer with an LGBMClassifier initialised by 'best_params'.\n\n    Args:\n        feature_engineering: Transformer that one-hot-encodes categorical\n            features and scales numerical ones.\n        X_train: Training features.\n        y_train: Training target.\n        X_val: Validation features.\n        y_val: Validation target.\n        best_params: Hyper-parameters returned by 'tune_hyperparameters'.\n\n    Returns:\n        tuple:\n            * model_pipeline - fitted pipeline ready for inference;\n            * val_accuracy - accuracy on the validation split.\n    \"\"\"\n    model_pipeline = Pipeline(\n        [\n            (\"feature_engineering\", feature_engineering),\n            (\"model\", LGBMClassifier()),\n        ]\n    ).set_params(**best_params)\n\n    model_pipeline.fit(X_train, y_train)\n    val_accuracy = model_pipeline.score(X_val, y_val)\n\n    return model_pipeline, val_accuracy\n",
+  "filepath": "kedro-pro\\src\\kedro_pro\\pipelines\\model_training\\nodes.py",
+  "parameters": {},
+  "run_command": "kedro run --to-nodes='model_training.train_final_model'",
+  "inputs": [
+    "model_training.feature_engineering",
+    "model_training.X_train",
+    "model_training.y_train",
+    "model_training.X_val",
+    "model_training.y_val",
+    "model_training.best_params"
+  ],
+  "outputs": [
+    "best_model",
+    "val_accuracy"
+  ]
+}

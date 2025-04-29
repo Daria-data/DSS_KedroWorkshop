@@ -1,0 +1,11 @@
+{
+  "type": "io.memory_dataset.MemoryDataset",
+  "filepath": null,
+  "run_command": "kedro run --to-outputs=model_evaluation.X_test_transformed",
+  "preview": null,
+  "preview_type": null,
+  "stats": {
+    "rows": 1304,
+    "columns": 30
+  }
+}

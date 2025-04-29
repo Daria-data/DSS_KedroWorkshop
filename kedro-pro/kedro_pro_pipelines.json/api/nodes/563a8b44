@@ -1,0 +1,8 @@
+{
+  "type": "json.json_dataset.JSONDataset",
+  "filepath": "C:/Users/d.antipova/Documents/DSS_KedroWorkshop/kedro-pro/data/05_model_input/best_params.json",
+  "run_command": "kedro run --to-outputs=model_training.best_params",
+  "preview": "{\"model__objective\": \"binary\", \"model__metric\": \"binary_logloss\", \"model__boosting_type\": \"gbdt\", \"model__verbosity\": -1, \"model__random_state\": 42, \"model__num_leaves\": 29, \"model__learning_rate\": 0.0765828824614713, \"model__feature_fraction\": 0.5130920179664654, \"model__bagging_fraction\": 0.5250917839600548, \"model__bagging_freq\": 6, \"model__min_child_samples\": 47}",
+  "preview_type": "JSONPreview",
+  "stats": null
+}

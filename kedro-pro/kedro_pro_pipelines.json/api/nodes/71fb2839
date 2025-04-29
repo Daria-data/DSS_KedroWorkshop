@@ -1,0 +1,13 @@
+{
+  "code": "def interpret_model(\n    model: LGBMClassifier,\n    X_test_transformed: pd.DataFrame,\n) -> np.ndarray:\n    \"\"\"Calculate SHAP values for X_test using the LightGBM estimator.\n\n    Args:\n        model: Trained LightGBM classifier.\n        X_test_transformed: Encoded and scaled test features.\n\n    Returns:\n        2-D numpy array of SHAP values (shape = n_samples * n_features, same shape as X_test).\n    \"\"\"\n    booster = model.booster_\n    if \"objective\" not in booster.params:\n        booster.params[\"objective\"] = model.get_params().get(\"objective\", \"binary\")\n    explainer = shap.TreeExplainer(booster)\n    shap_values = explainer.shap_values(X_test_transformed)\n    return shap_values\n",
+  "filepath": "kedro-pro\\src\\kedro_pro\\pipelines\\model_evaluation\\nodes.py",
+  "parameters": {},
+  "run_command": "kedro run --to-nodes='model_evaluation.interpret_model'",
+  "inputs": [
+    "model_evaluation.model",
+    "model_evaluation.X_test_transformed"
+  ],
+  "outputs": [
+    "shap_values"
+  ]
+}

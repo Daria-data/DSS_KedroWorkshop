@@ -1,0 +1,12 @@
+{
+  "code": "def add_cabin_features(df: pd.DataFrame) -> pd.DataFrame:\n    \"\"\"Create 'Deck' and 'Side' columns parsed from the 'Cabin' field.\n\n    Args:\n        df: Raw passengers dataframe that contains a 'Cabin' column\n            formatted like \"B/123/P\".\n\n    Returns:\n        A copy of the dataframe with two new columns:\n            * Deck — the first segment before the first slash.\n            * Side — the last segment after the last slash.\n    \"\"\"\n    df = df.copy()\n\n    # Deck is the first element before the first slash\n    df[\"Deck\"] = df[\"Cabin\"].apply(\n        lambda x: x.split(\"/\")[0] if not pd.isna(x) else None\n    )\n\n    # Side is the last element after the last slash\n    df[\"Side\"] = df[\"Cabin\"].apply(\n        lambda x: x.split(\"/\")[-1] if not pd.isna(x) else None\n    )\n\n    return df\n",
+  "filepath": "kedro-pro\\src\\kedro_pro\\pipelines\\data_preparation\\nodes.py",
+  "parameters": {},
+  "run_command": "kedro run --to-nodes='data_preparation_pipeline.add_cabin_features'",
+  "inputs": [
+    "raw_train"
+  ],
+  "outputs": [
+    "data_preparation_pipeline.df_with_cabin"
+  ]
+}

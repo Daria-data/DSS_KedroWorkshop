@@ -1,0 +1,752 @@
+{
+  "nodes": [
+    {
+      "id": "872981f9",
+      "name": "X_test",
+      "tags": [
+        "prep",
+        "split"
+      ],
+      "pipelines": [
+        "model_training",
+        "model_evaluation",
+        "__default__"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "model_training",
+        "model_evaluation"
+      ],
+      "layer": "model inputs",
+      "dataset_type": "pandas.csv_dataset.CSVDataset",
+      "stats": {
+        "rows": 1304,
+        "columns": 12,
+        "file_size": 82013
+      }
+    },
+    {
+      "id": "f6d9538c",
+      "name": "y_test",
+      "tags": [
+        "split",
+        "metrics"
+      ],
+      "pipelines": [
+        "model_training",
+        "model_evaluation",
+        "__default__"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "model_training",
+        "model_evaluation"
+      ],
+      "layer": "model inputs",
+      "dataset_type": "pandas.csv_dataset.CSVDataset",
+      "stats": {
+        "rows": 1304,
+        "columns": 1,
+        "file_size": 9799
+      }
+    },
+    {
+      "id": "2eb16f79",
+      "name": "best_model",
+      "tags": [
+        "prep",
+        "train"
+      ],
+      "pipelines": [
+        "model_training",
+        "model_evaluation",
+        "__default__"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "model_training",
+        "model_evaluation"
+      ],
+      "layer": "model",
+      "dataset_type": "pickle.pickle_dataset.PickleDataset",
+      "stats": null
+    },
+    {
+      "id": "5377961a",
+      "name": "transform_test_set",
+      "tags": [
+        "prep"
+      ],
+      "pipelines": [
+        "model_evaluation",
+        "__default__"
+      ],
+      "type": "task",
+      "modular_pipelines": [
+        "model_evaluation"
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "478ec6f1",
+      "name": "model_evaluation.X_test_transformed",
+      "tags": [
+        "metrics",
+        "plot",
+        "prep",
+        "shap"
+      ],
+      "pipelines": [
+        "model_evaluation",
+        "__default__"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "model_evaluation"
+      ],
+      "layer": null,
+      "dataset_type": "io.memory_dataset.MemoryDataset",
+      "stats": {
+        "rows": 1304,
+        "columns": 30
+      }
+    },
+    {
+      "id": "db018a54",
+      "name": "model_evaluation.model",
+      "tags": [
+        "prep",
+        "metrics",
+        "shap"
+      ],
+      "pipelines": [
+        "model_evaluation",
+        "__default__"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "model_evaluation"
+      ],
+      "layer": null,
+      "dataset_type": "io.memory_dataset.MemoryDataset",
+      "stats": null
+    },
+    {
+      "id": "71fb2839",
+      "name": "interpret_model",
+      "tags": [
+        "shap"
+      ],
+      "pipelines": [
+        "model_evaluation",
+        "__default__"
+      ],
+      "type": "task",
+      "modular_pipelines": [
+        "model_evaluation"
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "b990bfdd",
+      "name": "shap_values",
+      "tags": [
+        "plot",
+        "shap"
+      ],
+      "pipelines": [
+        "model_evaluation",
+        "__default__"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "model_evaluation"
+      ],
+      "layer": "evaluation",
+      "dataset_type": "pickle.pickle_dataset.PickleDataset",
+      "stats": null
+    },
+    {
+      "id": "bfc61216",
+      "name": "predict_and_metrics",
+      "tags": [
+        "metrics"
+      ],
+      "pipelines": [
+        "model_evaluation",
+        "__default__"
+      ],
+      "type": "task",
+      "modular_pipelines": [
+        "model_evaluation"
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "e283e1df",
+      "name": "cm",
+      "tags": [
+        "metrics",
+        "plot",
+        "cm"
+      ],
+      "pipelines": [
+        "model_evaluation",
+        "__default__"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "model_evaluation"
+      ],
+      "layer": "evaluation",
+      "dataset_type": "pickle.pickle_dataset.PickleDataset",
+      "stats": null
+    },
+    {
+      "id": "9983417b",
+      "name": "auc_score",
+      "tags": [
+        "metrics",
+        "plot",
+        "roc"
+      ],
+      "pipelines": [
+        "model_evaluation",
+        "__default__"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "model_evaluation"
+      ],
+      "layer": "evaluation",
+      "dataset_type": "json.json_dataset.JSONDataset",
+      "stats": null
+    },
+    {
+      "id": "931cbf1c",
+      "name": "model_evaluation.fpr",
+      "tags": [
+        "metrics",
+        "plot",
+        "roc"
+      ],
+      "pipelines": [
+        "model_evaluation",
+        "__default__"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "model_evaluation"
+      ],
+      "layer": null,
+      "dataset_type": "io.memory_dataset.MemoryDataset",
+      "stats": null
+    },
+    {
+      "id": "80fd6c20",
+      "name": "model_evaluation.tpr",
+      "tags": [
+        "metrics",
+        "plot",
+        "roc"
+      ],
+      "pipelines": [
+        "model_evaluation",
+        "__default__"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "model_evaluation"
+      ],
+      "layer": null,
+      "dataset_type": "io.memory_dataset.MemoryDataset",
+      "stats": null
+    },
+    {
+      "id": "a1c0b25d",
+      "name": "plot_confusion_matrix",
+      "tags": [
+        "plot",
+        "cm"
+      ],
+      "pipelines": [
+        "model_evaluation",
+        "__default__"
+      ],
+      "type": "task",
+      "modular_pipelines": [
+        "model_evaluation"
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "af40a5b1",
+      "name": "confusion_matrix_plot",
+      "tags": [
+        "plot",
+        "cm"
+      ],
+      "pipelines": [
+        "model_evaluation",
+        "__default__"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "model_evaluation"
+      ],
+      "layer": "reporting",
+      "dataset_type": "matplotlib.matplotlib_writer.MatplotlibWriter",
+      "stats": null
+    },
+    {
+      "id": "e4b6aff3",
+      "name": "plot_roc_curve",
+      "tags": [
+        "roc",
+        "plot"
+      ],
+      "pipelines": [
+        "model_evaluation",
+        "__default__"
+      ],
+      "type": "task",
+      "modular_pipelines": [
+        "model_evaluation"
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "ac01263d",
+      "name": "roc_curve_plot",
+      "tags": [
+        "roc",
+        "plot"
+      ],
+      "pipelines": [
+        "model_evaluation",
+        "__default__"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "model_evaluation"
+      ],
+      "layer": "reporting",
+      "dataset_type": "matplotlib.matplotlib_writer.MatplotlibWriter",
+      "stats": null
+    },
+    {
+      "id": "aabbd10d",
+      "name": "shap_bar_plot",
+      "tags": [
+        "plot",
+        "shap"
+      ],
+      "pipelines": [
+        "model_evaluation",
+        "__default__"
+      ],
+      "type": "task",
+      "modular_pipelines": [
+        "model_evaluation"
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "cab8c9da",
+      "name": "shap_bar_plot",
+      "tags": [
+        "plot",
+        "shap"
+      ],
+      "pipelines": [
+        "model_evaluation",
+        "__default__"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "model_evaluation"
+      ],
+      "layer": "reporting",
+      "dataset_type": "matplotlib.matplotlib_writer.MatplotlibWriter",
+      "stats": null
+    },
+    {
+      "id": "84216d71",
+      "name": "shap_summary_plot",
+      "tags": [
+        "plot",
+        "shap"
+      ],
+      "pipelines": [
+        "model_evaluation",
+        "__default__"
+      ],
+      "type": "task",
+      "modular_pipelines": [
+        "model_evaluation"
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "0db3e791",
+      "name": "shap_summary_plot",
+      "tags": [
+        "plot",
+        "shap"
+      ],
+      "pipelines": [
+        "model_evaluation",
+        "__default__"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "model_evaluation"
+      ],
+      "layer": "reporting",
+      "dataset_type": "matplotlib.matplotlib_writer.MatplotlibWriter",
+      "stats": null
+    },
+    {
+      "id": "model_evaluation",
+      "name": "model_evaluation",
+      "tags": [
+        "cm",
+        "prep",
+        "shap",
+        "metrics",
+        "plot",
+        "roc"
+      ],
+      "pipelines": [
+        "model_evaluation"
+      ],
+      "type": "modularPipeline",
+      "modular_pipelines": null,
+      "layer": null,
+      "dataset_type": null,
+      "stats": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "db018a54",
+      "target": "bfc61216"
+    },
+    {
+      "source": "5377961a",
+      "target": "478ec6f1"
+    },
+    {
+      "source": "e4b6aff3",
+      "target": "ac01263d"
+    },
+    {
+      "source": "db018a54",
+      "target": "71fb2839"
+    },
+    {
+      "source": "b990bfdd",
+      "target": "aabbd10d"
+    },
+    {
+      "source": "model_evaluation",
+      "target": "af40a5b1"
+    },
+    {
+      "source": "f6d9538c",
+      "target": "model_evaluation"
+    },
+    {
+      "source": "bfc61216",
+      "target": "9983417b"
+    },
+    {
+      "source": "b990bfdd",
+      "target": "84216d71"
+    },
+    {
+      "source": "872981f9",
+      "target": "5377961a"
+    },
+    {
+      "source": "478ec6f1",
+      "target": "bfc61216"
+    },
+    {
+      "source": "71fb2839",
+      "target": "b990bfdd"
+    },
+    {
+      "source": "2eb16f79",
+      "target": "5377961a"
+    },
+    {
+      "source": "478ec6f1",
+      "target": "71fb2839"
+    },
+    {
+      "source": "bfc61216",
+      "target": "80fd6c20"
+    },
+    {
+      "source": "9983417b",
+      "target": "e4b6aff3"
+    },
+    {
+      "source": "e283e1df",
+      "target": "a1c0b25d"
+    },
+    {
+      "source": "bfc61216",
+      "target": "931cbf1c"
+    },
+    {
+      "source": "aabbd10d",
+      "target": "cab8c9da"
+    },
+    {
+      "source": "80fd6c20",
+      "target": "e4b6aff3"
+    },
+    {
+      "source": "478ec6f1",
+      "target": "aabbd10d"
+    },
+    {
+      "source": "872981f9",
+      "target": "model_evaluation"
+    },
+    {
+      "source": "model_evaluation",
+      "target": "cab8c9da"
+    },
+    {
+      "source": "model_evaluation",
+      "target": "0db3e791"
+    },
+    {
+      "source": "931cbf1c",
+      "target": "e4b6aff3"
+    },
+    {
+      "source": "2eb16f79",
+      "target": "model_evaluation"
+    },
+    {
+      "source": "5377961a",
+      "target": "db018a54"
+    },
+    {
+      "source": "478ec6f1",
+      "target": "84216d71"
+    },
+    {
+      "source": "bfc61216",
+      "target": "e283e1df"
+    },
+    {
+      "source": "f6d9538c",
+      "target": "bfc61216"
+    },
+    {
+      "source": "a1c0b25d",
+      "target": "af40a5b1"
+    },
+    {
+      "source": "84216d71",
+      "target": "0db3e791"
+    },
+    {
+      "source": "model_evaluation",
+      "target": "ac01263d"
+    }
+  ],
+  "layers": [
+    "model inputs",
+    "model",
+    "intermediate",
+    "raw",
+    "evaluation",
+    "reporting"
+  ],
+  "tags": [
+    {
+      "id": "cm",
+      "name": "cm"
+    },
+    {
+      "id": "features",
+      "name": "features"
+    },
+    {
+      "id": "metrics",
+      "name": "metrics"
+    },
+    {
+      "id": "plot",
+      "name": "plot"
+    },
+    {
+      "id": "prep",
+      "name": "prep"
+    },
+    {
+      "id": "preprocess",
+      "name": "preprocess"
+    },
+    {
+      "id": "roc",
+      "name": "roc"
+    },
+    {
+      "id": "shap",
+      "name": "shap"
+    },
+    {
+      "id": "split",
+      "name": "split"
+    },
+    {
+      "id": "train",
+      "name": "train"
+    },
+    {
+      "id": "tuning",
+      "name": "tuning"
+    }
+  ],
+  "pipelines": [
+    {
+      "id": "__default__",
+      "name": "__default__"
+    },
+    {
+      "id": "data_preparation",
+      "name": "data_preparation"
+    },
+    {
+      "id": "model_evaluation",
+      "name": "model_evaluation"
+    },
+    {
+      "id": "model_training",
+      "name": "model_training"
+    }
+  ],
+  "modular_pipelines": {
+    "__root__": {
+      "id": "__root__",
+      "name": "__root__",
+      "inputs": [],
+      "outputs": [],
+      "children": [
+        {
+          "id": "872981f9",
+          "type": "data"
+        },
+        {
+          "id": "0db3e791",
+          "type": "data"
+        },
+        {
+          "id": "af40a5b1",
+          "type": "data"
+        },
+        {
+          "id": "model_evaluation",
+          "type": "modularPipeline"
+        },
+        {
+          "id": "2eb16f79",
+          "type": "data"
+        },
+        {
+          "id": "f6d9538c",
+          "type": "data"
+        },
+        {
+          "id": "cab8c9da",
+          "type": "data"
+        },
+        {
+          "id": "ac01263d",
+          "type": "data"
+        }
+      ]
+    },
+    "model_evaluation": {
+      "id": "model_evaluation",
+      "name": "model_evaluation",
+      "inputs": [
+        "f6d9538c",
+        "872981f9",
+        "2eb16f79"
+      ],
+      "outputs": [
+        "af40a5b1",
+        "ac01263d",
+        "cab8c9da",
+        "0db3e791"
+      ],
+      "children": [
+        {
+          "id": "db018a54",
+          "type": "data"
+        },
+        {
+          "id": "5377961a",
+          "type": "task"
+        },
+        {
+          "id": "bfc61216",
+          "type": "task"
+        },
+        {
+          "id": "931cbf1c",
+          "type": "data"
+        },
+        {
+          "id": "e4b6aff3",
+          "type": "task"
+        },
+        {
+          "id": "71fb2839",
+          "type": "task"
+        },
+        {
+          "id": "9983417b",
+          "type": "data"
+        },
+        {
+          "id": "aabbd10d",
+          "type": "task"
+        },
+        {
+          "id": "84216d71",
+          "type": "task"
+        },
+        {
+          "id": "a1c0b25d",
+          "type": "task"
+        },
+        {
+          "id": "e283e1df",
+          "type": "data"
+        },
+        {
+          "id": "b990bfdd",
+          "type": "data"
+        },
+        {
+          "id": "478ec6f1",
+          "type": "data"
+        },
+        {
+          "id": "80fd6c20",
+          "type": "data"
+        }
+      ]
+    }
+  },
+  "selected_pipeline": "model_evaluation"
+}

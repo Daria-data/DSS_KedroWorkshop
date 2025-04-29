@@ -1,0 +1,8 @@
+{
+  "type": "pickle.pickle_dataset.PickleDataset",
+  "filepath": "C:/Users/d.antipova/Documents/DSS_KedroWorkshop/kedro-pro/data/07_evaluation/shap_values.pkl",
+  "run_command": "kedro run --to-outputs=shap_values",
+  "preview": null,
+  "preview_type": null,
+  "stats": null
+}
