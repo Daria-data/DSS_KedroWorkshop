@@ -64,6 +64,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                     "y_train",
                     "X_val",
                     "y_val",
+                    "params:tune_hyperparameters",
                 ],
                 outputs="best_params",
                 name="tune_hyperparameters",

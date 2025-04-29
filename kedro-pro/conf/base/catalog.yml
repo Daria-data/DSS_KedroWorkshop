@@ -142,3 +142,7 @@ shap_bar_plot:
   metadata:
     kedro-viz:
       layer: reporting
+
+params:model_training.tune_hyperparameters:
+  type: yaml.YAMLDataset
+  filepath: conf/base/parameters_model_training.yml

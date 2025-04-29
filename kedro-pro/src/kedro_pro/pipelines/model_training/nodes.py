@@ -101,6 +101,7 @@ def tune_hyperparameters(
     y_train: pd.Series,
     X_val: pd.DataFrame,
     y_val: pd.Series,
+    cfg: dict,
 ) -> dict[str, float]:
     """Search for the LightGBM hyper-parameters that maximise validation accuracy.
 
@@ -116,13 +117,15 @@ def tune_hyperparameters(
         y_train: Training target.
         X_val: Validation features.
         y_val: Validation target.
+        cfg: Dictionary loaded from parameters_model_training.yml under the key 'tune_hyperparameters', containig ranges and settings.
 
     Returns:
         dict[str, float]: Mapping of parameter names to their optimal
         values, ready to be passed into ``Pipeline.set_params``.
     """
-    N_TRIALS = 100
-    RANDOM_STATE = 42
+    cfg = cfg["tune_hyperparameters"]
+    n_trials = cfg["n_trials"]
+    random_state = cfg["random_state"]
 
     def objective(trial: optuna.Trial) -> float:
         params = {
@@ -138,22 +141,37 @@ def tune_hyperparameters(
             ),
             "model__verbosity": trial.suggest_categorical("model__verbosity", [-1]),
             "model__random_state": trial.suggest_categorical(
-                "model__random_state", [RANDOM_STATE]
+                "model__random_state", [cfg["random_state"]]
             ),
             # Hyper-parameters (to be tuned)
-            "model__num_leaves": trial.suggest_int("model__num_leaves", 10, 100),
+            "model__num_leaves": trial.suggest_int(
+                "model__num_leaves", cfg["num_leaves"]["low"], cfg["num_leaves"]["high"]
+            ),
             "model__learning_rate": trial.suggest_float(
-                "model__learning_rate", 0.01, 0.1, log=True
+                "model__learning_rate",
+                cfg["learning_rate"]["low"],
+                cfg["learning_rate"]["high"],
+                log=cfg["learning_rate"]["log"],
             ),
             "model__feature_fraction": trial.suggest_float(
-                "model__feature_fraction", 0.1, 1.0
+                "model__feature_fraction",
+                cfg["feature_fraction"]["low"],
+                cfg["feature_fraction"]["high"],
             ),
             "model__bagging_fraction": trial.suggest_float(
-                "model__bagging_fraction", 0.1, 1.0
+                "model__bagging_fraction",
+                cfg["bagging_fraction"]["low"],
+                cfg["bagging_fraction"]["high"],
             ),
-            "model__bagging_freq": trial.suggest_int("model__bagging_freq", 1, 10),
+            "model__bagging_freq": trial.suggest_int(
+                "model__bagging_freq",
+                cfg["bagging_freq"]["low"],
+                cfg["bagging_freq"]["high"],
+            ),
             "model__min_child_samples": trial.suggest_int(
-                "model__min_child_samples", 1, 50
+                "model__min_child_samples",
+                cfg["min_child_samples"]["low"],
+                cfg["min_child_samples"]["high"],
             ),
         }
 
@@ -170,9 +188,9 @@ def tune_hyperparameters(
     optuna.logging.set_verbosity(optuna.logging.WARNING)
     study = optuna.create_study(
         direction="maximize",
-        sampler=optuna.samplers.TPESampler(seed=RANDOM_STATE),
+        sampler=optuna.samplers.TPESampler(seed=random_state),
     )
-    study.optimize(objective, n_trials=N_TRIALS)
+    study.optimize(objective, n_trials=n_trials)
 
     return study.best_params
 
@@ -211,7 +229,7 @@ def train_final_model(  # noqa
         ]
     ).set_params(**best_params)
 
-    model_pipeline.fit(X_train, y_train)
-    val_accuracy = model_pipeline.score(X_val, y_val)
+    model_pipeline.fit(X_train, y_train.values.ravel())
+    val_accuracy = model_pipeline.score(X_val, y_val.values.ravel())
 
     return model_pipeline, val_accuracy
