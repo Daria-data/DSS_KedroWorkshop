@@ -1,0 +1,17 @@
+{
+  "code": "def predict_and_metrics(\n    model: LGBMClassifier,\n    X_test_transformed: pd.DataFrame,\n    y_test: pd.Series,\n) -> tuple[np.ndarray, float, np.ndarray, np.ndarray]:\n    \"\"\"Generate predictions and compute evaluation metrics.\n\n    Args:\n        model: Trained LightGBM classifier.\n        X_test_transformed: Encoded and scaled test features.\n        y_test: True target values for the test split.\n\n    Returns:\n        tuple:\n            * cm: '2x2' confusion-matrix normalised by true class.\n            * auc_score: ROC-AUC value on X_test.\n            * fpr: array of false-positive-rate values (for ROC).\n            * tpr: array of true-positive-rate values (for ROC).\n    \"\"\"\n    y_pred = model.predict(X_test_transformed)\n    y_pred_probs = model.predict_proba(X_test_transformed)[:, 1]\n\n    cm = confusion_matrix(y_test, y_pred, normalize=\"true\")\n    # Calculate the false positive rate, true positive rate\n    fpr, tpr, _ = roc_curve(y_test, y_pred_probs)\n    auc_score = roc_auc_score(y_test, y_pred_probs)\n\n    return cm, auc_score, fpr, tpr\n",
+  "filepath": "kedro-pro\\src\\kedro_pro\\pipelines\\model_evaluation\\nodes.py",
+  "parameters": {},
+  "run_command": "kedro run --to-nodes='model_evaluation.predict_and_metrics'",
+  "inputs": [
+    "model_evaluation.model",
+    "model_evaluation.X_test_transformed",
+    "y_test"
+  ],
+  "outputs": [
+    "cm",
+    "auc_score",
+    "model_evaluation.fpr",
+    "model_evaluation.tpr"
+  ]
+}

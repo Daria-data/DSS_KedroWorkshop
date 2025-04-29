@@ -1,0 +1,12 @@
+{
+  "code": "def fill_missing_values(df: pd.DataFrame) -> pd.DataFrame:\n    \"\"\"Impute missing data using median (numeric) and mode (categorical).\n\n    Args:\n        df: DataFrame returned by `add_cabin_features`.\n\n    Returns:\n        DataFrame with no missing values for the selected columns.\n    \"\"\"\n    df = df.copy()\n\n    # Numerical: median\n    df[\"Age\"].fillna(df[\"Age\"].median())\n\n    # Categorical: mode\n    df[\"HomePlanet\"].fillna(df[\"HomePlanet\"].mode()[0])\n    df[\"Destination\"].fillna(df[\"Destination\"].mode()[0])\n    df[\"Deck\"].fillna(df[\"Deck\"].mode()[0])\n    df[\"Side\"].fillna(df[\"Side\"].mode()[0])\n\n    # Fill na constant values for the remaining columns we are going to use\n    df[\"VIP\"] = df[\"VIP\"].fillna(False).astype(\"boolean\")\n    df[\"CryoSleep\"] = df[\"CryoSleep\"].fillna(False).astype(\"boolean\")\n    df['VRDeck'].fillna(0)\n    df['RoomService'].fillna(0)\n    df['FoodCourt'].fillna(0)\n    df['ShoppingMall'].fillna(0)\n    df['Spa'].fillna(0)\n    df['VRDeck'].fillna(0)\n\n    return df\n",
+  "filepath": "kedro-pro\\src\\kedro_pro\\pipelines\\data_preparation\\nodes.py",
+  "parameters": {},
+  "run_command": "kedro run --to-nodes='data_preparation_pipeline.fill_missing_values'",
+  "inputs": [
+    "data_preparation_pipeline.df_with_cabin"
+  ],
+  "outputs": [
+    "data_preparation_pipeline.df_filled"
+  ]
+}

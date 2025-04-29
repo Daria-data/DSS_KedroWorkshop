@@ -1,0 +1,13 @@
+{
+  "code": "def shap_summary_plot(\n    shap_values: np.ndarray,\n    X_test_transformed: pd.DataFrame,\n) -> any:\n    \"\"\"Create SHAP summary (dot) plot.\n\n    Args:\n        shap_values: SHAP values from \"compute_shap_values\".\n        X_test_transformed: Encoded and scaled test features.\n\n    Returns:\n        Matplotlib figure with the summary plot.\n    \"\"\"\n    shap.summary_plot(shap_values, X_test_transformed, show=False, plot_size=0.2)\n    return plt.gcf()\n",
+  "filepath": "kedro-pro\\src\\kedro_pro\\pipelines\\model_evaluation\\nodes.py",
+  "parameters": {},
+  "run_command": "kedro run --to-nodes='model_evaluation.shap_summary_plot'",
+  "inputs": [
+    "shap_values",
+    "model_evaluation.X_test_transformed"
+  ],
+  "outputs": [
+    "shap_summary_plot"
+  ]
+}

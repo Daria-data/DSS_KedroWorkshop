@@ -1,0 +1,40 @@
+{
+  "type": "pandas.csv_dataset.CSVDataset",
+  "filepath": "C:/Users/d.antipova/Documents/DSS_KedroWorkshop/kedro-pro/data/05_model_input/y_test.csv",
+  "run_command": "kedro run --to-outputs=y_test",
+  "preview": {
+    "index": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "columns": [
+      "Transported"
+    ],
+    "data": [
+      [
+        true
+      ],
+      [
+        false
+      ],
+      [
+        false
+      ],
+      [
+        true
+      ],
+      [
+        true
+      ]
+    ]
+  },
+  "preview_type": "TablePreview",
+  "stats": {
+    "rows": 1304,
+    "columns": 1,
+    "file_size": 9799
+  }
+}

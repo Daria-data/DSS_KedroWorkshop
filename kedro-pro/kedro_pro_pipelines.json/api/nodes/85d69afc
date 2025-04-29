@@ -1,0 +1,13 @@
+{
+  "code": "def make_feature_pipeline(\n    cat_columns: list[str],\n    num_columns: list[str],\n) -> ColumnTransformer:\n    \"\"\"Build a preprocessing pipeline that\n\n    1. One-hot-encodes categorical features.\n    2. Scales numerical features to [0, 1].\n\n    Args:\n        cat_columns: Names of categorical feature columns.\n        num_columns: Names of numerical feature columns.\n\n    Returns:\n        Configured ColumnTransformer instance.\n    \"\"\"\n    return ColumnTransformer(\n        transformers=[\n            (\n                \"onehot_encoding\",\n                OneHotEncoder(handle_unknown=\"ignore\", sparse_output=False),\n                cat_columns,\n            ),\n            (\"minmax_scaling\", MinMaxScaler(), num_columns),\n        ]\n    )\n",
+  "filepath": "kedro-pro\\src\\kedro_pro\\pipelines\\model_training\\nodes.py",
+  "parameters": {},
+  "run_command": "kedro run --to-nodes='model_training.make_feature_pipeline'",
+  "inputs": [
+    "model_training.cat_columns",
+    "model_training.num_columns"
+  ],
+  "outputs": [
+    "model_training.feature_engineering"
+  ]
+}

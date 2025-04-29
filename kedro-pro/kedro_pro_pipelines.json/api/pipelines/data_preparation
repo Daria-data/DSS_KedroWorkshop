@@ -1,0 +1,302 @@
+{
+  "nodes": [
+    {
+      "id": "06e71861",
+      "name": "add_cabin_features",
+      "tags": [],
+      "pipelines": [
+        "data_preparation",
+        "__default__"
+      ],
+      "type": "task",
+      "modular_pipelines": [
+        "data_preparation_pipeline"
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "8abbb201",
+      "name": "raw_train",
+      "tags": [],
+      "pipelines": [
+        "data_preparation",
+        "__default__"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "data_preparation_pipeline"
+      ],
+      "layer": "raw",
+      "dataset_type": "pandas.csv_dataset.CSVDataset",
+      "stats": {
+        "rows": 8693,
+        "columns": 14,
+        "file_size": 814115
+      }
+    },
+    {
+      "id": "bb55be70",
+      "name": "data_preparation_pipeline.df_with_cabin",
+      "tags": [],
+      "pipelines": [
+        "data_preparation",
+        "__default__"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "data_preparation_pipeline"
+      ],
+      "layer": null,
+      "dataset_type": "io.memory_dataset.MemoryDataset",
+      "stats": {
+        "rows": 8693,
+        "columns": 16
+      }
+    },
+    {
+      "id": "f24f3c79",
+      "name": "fill_missing_values",
+      "tags": [],
+      "pipelines": [
+        "data_preparation",
+        "__default__"
+      ],
+      "type": "task",
+      "modular_pipelines": [
+        "data_preparation_pipeline"
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "c07504ae",
+      "name": "data_preparation_pipeline.df_filled",
+      "tags": [],
+      "pipelines": [
+        "data_preparation",
+        "__default__"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "data_preparation_pipeline"
+      ],
+      "layer": null,
+      "dataset_type": "io.memory_dataset.MemoryDataset",
+      "stats": {
+        "rows": 8693,
+        "columns": 16
+      }
+    },
+    {
+      "id": "66c5ac27",
+      "name": "drop_unused_columns",
+      "tags": [],
+      "pipelines": [
+        "data_preparation",
+        "__default__"
+      ],
+      "type": "task",
+      "modular_pipelines": [
+        "data_preparation_pipeline"
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "0e7db813",
+      "name": "clean_train",
+      "tags": [
+        "split"
+      ],
+      "pipelines": [
+        "data_preparation",
+        "model_training",
+        "__default__"
+      ],
+      "type": "data",
+      "modular_pipelines": [
+        "data_preparation_pipeline",
+        "model_training"
+      ],
+      "layer": "intermediate",
+      "dataset_type": "pandas.csv_dataset.CSVDataset",
+      "stats": {
+        "rows": 8693,
+        "columns": 13,
+        "file_size": 594646
+      }
+    },
+    {
+      "id": "data_preparation_pipeline",
+      "name": "data_preparation_pipeline",
+      "tags": [],
+      "pipelines": [
+        "data_preparation"
+      ],
+      "type": "modularPipeline",
+      "modular_pipelines": null,
+      "layer": null,
+      "dataset_type": null,
+      "stats": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "c07504ae",
+      "target": "66c5ac27"
+    },
+    {
+      "source": "66c5ac27",
+      "target": "0e7db813"
+    },
+    {
+      "source": "8abbb201",
+      "target": "06e71861"
+    },
+    {
+      "source": "data_preparation_pipeline",
+      "target": "0e7db813"
+    },
+    {
+      "source": "06e71861",
+      "target": "bb55be70"
+    },
+    {
+      "source": "8abbb201",
+      "target": "data_preparation_pipeline"
+    },
+    {
+      "source": "f24f3c79",
+      "target": "c07504ae"
+    },
+    {
+      "source": "bb55be70",
+      "target": "f24f3c79"
+    }
+  ],
+  "layers": [
+    "evaluation",
+    "raw",
+    "model",
+    "model inputs",
+    "reporting",
+    "intermediate"
+  ],
+  "tags": [
+    {
+      "id": "cm",
+      "name": "cm"
+    },
+    {
+      "id": "features",
+      "name": "features"
+    },
+    {
+      "id": "metrics",
+      "name": "metrics"
+    },
+    {
+      "id": "plot",
+      "name": "plot"
+    },
+    {
+      "id": "prep",
+      "name": "prep"
+    },
+    {
+      "id": "preprocess",
+      "name": "preprocess"
+    },
+    {
+      "id": "roc",
+      "name": "roc"
+    },
+    {
+      "id": "shap",
+      "name": "shap"
+    },
+    {
+      "id": "split",
+      "name": "split"
+    },
+    {
+      "id": "train",
+      "name": "train"
+    },
+    {
+      "id": "tuning",
+      "name": "tuning"
+    }
+  ],
+  "pipelines": [
+    {
+      "id": "__default__",
+      "name": "__default__"
+    },
+    {
+      "id": "data_preparation",
+      "name": "data_preparation"
+    },
+    {
+      "id": "model_evaluation",
+      "name": "model_evaluation"
+    },
+    {
+      "id": "model_training",
+      "name": "model_training"
+    }
+  ],
+  "modular_pipelines": {
+    "__root__": {
+      "id": "__root__",
+      "name": "__root__",
+      "inputs": [],
+      "outputs": [],
+      "children": [
+        {
+          "id": "8abbb201",
+          "type": "data"
+        },
+        {
+          "id": "0e7db813",
+          "type": "data"
+        },
+        {
+          "id": "data_preparation_pipeline",
+          "type": "modularPipeline"
+        }
+      ]
+    },
+    "data_preparation_pipeline": {
+      "id": "data_preparation_pipeline",
+      "name": "data_preparation_pipeline",
+      "inputs": [
+        "8abbb201"
+      ],
+      "outputs": [
+        "0e7db813"
+      ],
+      "children": [
+        {
+          "id": "bb55be70",
+          "type": "data"
+        },
+        {
+          "id": "f24f3c79",
+          "type": "task"
+        },
+        {
+          "id": "c07504ae",
+          "type": "data"
+        },
+        {
+          "id": "66c5ac27",
+          "type": "task"
+        },
+        {
+          "id": "06e71861",
+          "type": "task"
+        }
+      ]
+    }
+  },
+  "selected_pipeline": "data_preparation"
+}

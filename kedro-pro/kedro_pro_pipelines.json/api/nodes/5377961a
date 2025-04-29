@@ -1,0 +1,14 @@
+{
+  "code": "def transform_test_set(\n    model_pipeline: Pipeline,\n    X_test: pd.DataFrame,\n) -> tuple[pd.DataFrame, LGBMClassifier]:\n    \"\"\"Apply the feature-engineering step to X_test.\n\n    Args:\n        model_pipeline: Pipeline loaded from best_model.pkl.\n        X_test: Raw test-split features produced by model_training pipeline.\n\n    Returns:\n        tuple:\n            - X_test_transformed: transformed features (overwriting the raw version);\n            - model: underlying LGBMClassifier estimator.\n    \"\"\"\n    X_test_transformed = model_pipeline[\"feature_engineering\"].transform(X_test)\n    model = model_pipeline[\"model\"]\n    return X_test_transformed, model\n",
+  "filepath": "kedro-pro\\src\\kedro_pro\\pipelines\\model_evaluation\\nodes.py",
+  "parameters": {},
+  "run_command": "kedro run --to-nodes='model_evaluation.transform_test_set'",
+  "inputs": [
+    "best_model",
+    "X_test"
+  ],
+  "outputs": [
+    "model_evaluation.X_test_transformed",
+    "model_evaluation.model"
+  ]
+}

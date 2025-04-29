@@ -86,5 +86,5 @@ def create_pipeline(**kwargs) -> Pipeline:
         ],
         namespace="model_training",
         inputs=["clean_train"],
-        outputs=["best_model", "val_accuracy"],
+        outputs=["best_model", "val_accuracy", "X_test", "y_test"],
     )
