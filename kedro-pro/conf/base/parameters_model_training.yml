@@ -1,5 +1,22 @@
-# This is a boilerplate parameters config generated for pipeline 'model_training'
-# using Kedro 0.19.12.
-#
-# Documentation for this file format can be found in "Parameters"
-# Link: https://docs.kedro.org/en/0.19.12/configuration/parameters.html
+tune_hyperparameters:
+  n_trials: 100
+  random_state: 42
+  num_leaves:
+    low: 10
+    high: 100
+  learning_rate:
+    low: 0.01
+    high: 0.1
+    log: true
+  feature_fraction:
+    low: 0.1
+    high: 1.0
+  bagging_fraction:
+    low: 0.1
+    high: 1.0
+  bagging_freq:
+    low: 1
+    high: 10
+  min_child_samples:
+    low: 1
+    high: 50
