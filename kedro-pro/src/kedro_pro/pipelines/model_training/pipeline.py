@@ -22,8 +22,8 @@ from .nodes import (
 )
 
 # Helper: read conf/base/parameters_model_training.yml to get model list
-PARAMS_FILE = Path(__file__).resolve().parents[3] / "conf" / "base" / "parameters_model_training.yml"
-with open(PARAMS_FILE, "r", encoding="utf-8") as fp:
+PARAMS_FILE = Path(__file__).resolve().parents[4] / "conf" / "base" / "parameters_model_training.yml"
+with open(PARAMS_FILE, encoding="utf-8") as fp:
     MODELS = list(yaml.safe_load(fp)["models"].keys())
 
 def _make_model_nodes(model_key: str) -> list[node]:
@@ -98,7 +98,12 @@ def create_pipeline(**kwargs) -> Pipeline:
     for model in MODELS:
         model_nodes.extend(_make_model_nodes(model))
 
-    return Pipeline(common_nodes + model_nodes, namespace="model_training")
+    return pipeline(
+        common_nodes + model_nodes,
+        namespace="model_training",
+        inputs=["clean_train"],
+        parameters={f"models.{m}" for m in MODELS},
+    )
 
     # return pipeline(
     #     [    #         node(

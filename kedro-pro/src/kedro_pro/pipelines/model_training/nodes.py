@@ -139,15 +139,16 @@ def tune_hyperparameters(  # noqa
         for name, spec in tp_cfg.items():
             if name in ("n_trials", "random_state"):
                 continue
-            if isinstance(spec, dict) and "low" in spec and "high" in spec:
+            if isinstance(spec, list):
+                # categorical parameter
+                trial_params[name] = trial.suggest_categorical(name, spec)
+            elif isinstance(spec, dict) and "low" in spec and "high" in spec:
                 low, high = spec["low"], spec["high"]
                 if isinstance(low, int) and isinstance(high, int):
                     trial_params[name] = trial.suggest_int(name, low, high)
                 else:
                     log_flag = bool(spec.get("log", False))
-                    trial_params[name] = trial.suggest_float(
-                        name, low, high, log=log_flag
-                    )
+                    trial_params[name] = trial.suggest_float(name, low, high, log=log_flag)
 
         model_pipeline = Pipeline(
             [

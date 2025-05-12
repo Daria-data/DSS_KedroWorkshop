@@ -4,7 +4,8 @@ from pathlib import Path
 import yaml
 from kedro.framework.hooks import hook_impl
 from kedro.io import DataCatalog, MemoryDataset
-from kedro-datasets import CSVDataset, PickleDataset
+from kedro_datasets.pandas import CSVDataset
+from kedro_datasets.pickle import PickleDataset
 from kedro.config import OmegaConfigLoader  # noqa: E402
 
 
