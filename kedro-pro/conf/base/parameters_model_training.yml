@@ -1,6 +1,18 @@
+model:
+  # Full import path to the model class
+  class: lightgbm.LGBMClassifier
+  # Default constructor parameters for the model
+  init_params:
+    objective: binary
+    metric: binary_logloss
+    boosting_type: gbdt
+    verbosity: -1
+
 tune_hyperparameters:
   n_trials: 100
   random_state: 42
+
+  # Parameter ranges for tuning
   num_leaves:
     low: 10
     high: 100

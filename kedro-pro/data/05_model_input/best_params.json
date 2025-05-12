@@ -1,13 +1,8 @@
 {
-  "model__objective": "binary",
-  "model__metric": "binary_logloss",
-  "model__boosting_type": "gbdt",
-  "model__verbosity": -1,
-  "model__random_state": 42,
-  "model__num_leaves": 29,
-  "model__learning_rate": 0.0765828824614713,
-  "model__feature_fraction": 0.5130920179664654,
-  "model__bagging_fraction": 0.5250917839600548,
-  "model__bagging_freq": 6,
-  "model__min_child_samples": 47
+  "num_leaves": 68,
+  "learning_rate": 0.032878407219036045,
+  "feature_fraction": 0.6157767116523245,
+  "bagging_fraction": 0.43152179453359724,
+  "bagging_freq": 6,
+  "min_child_samples": 47
 }

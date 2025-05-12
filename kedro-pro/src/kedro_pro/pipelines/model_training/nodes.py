@@ -1,6 +1,7 @@
+import importlib
+
 import optuna
 import pandas as pd
-from lightgbm import LGBMClassifier
 from sklearn import set_config
 from sklearn.compose import ColumnTransformer
 from sklearn.model_selection import train_test_split
@@ -95,20 +96,21 @@ def make_feature_pipeline(
     )
 
 
-def tune_hyperparameters(
+def tune_hyperparameters(  # noqa
     feature_engineering: ColumnTransformer,
     X_train: pd.DataFrame,
     y_train: pd.Series,
     X_val: pd.DataFrame,
     y_val: pd.Series,
-    cfg: dict,
-) -> dict[str, float]:
-    """Search for the LightGBM hyper-parameters that maximise validation accuracy.
+    cfg: dict[str, object],
+) -> dict[str, object]:
+    """Dynamically load model class and tune its parameters as per config.
 
-    The search space replicates the ranges used during experimentation.
-    Optuna evaluates N_TRIALS random-seed-controlled trials and returns
-    the parameter set that gives the highest accuracy on the
-    validation split.
+    Description:
+        1. Load n_trials and random_state from config.
+        2. Import model class from full path in config.
+        3. Use init_params as base, then suggest ranges from tune_hyperparameters.
+        4. Run Optuna study and return merged best_params.
 
     Args:
         feature_engineering: Fully configured ColumnTransformer that
@@ -117,70 +119,46 @@ def tune_hyperparameters(
         y_train: Training target.
         X_val: Validation features.
         y_val: Validation target.
-        cfg: Dictionary loaded from parameters_model_training.yml under the key 'tune_hyperparameters', containig ranges and settings.
+        cfg: Dictionary loaded from parameters_model_training.yml.
 
     Returns:
-        dict[str, float]: Mapping of parameter names to their optimal
-        values, ready to be passed into ``Pipeline.set_params``.
+        dict[str, object]: A dict with both init_params and tuned hyperparameters.
     """
-    cfg = cfg["tune_hyperparameters"]
-    n_trials = cfg["n_trials"]
-    random_state = cfg["random_state"]
+    model_cfg = cfg["model"]
+    tp_cfg = cfg["tune_hyperparameters"]
+    n_trials = tp_cfg.get("n_trials")
+    random_state = tp_cfg.get("random_state")
+
+    # import model class dynamically
+    module_name, class_name = model_cfg["class"].rsplit(".", 1)
+    ModelClass = getattr(importlib.import_module(module_name), class_name)
+
+    # base init parameters
+    params = dict(model_cfg.get("init_params", {}))
 
     def objective(trial: optuna.Trial) -> float:
-        params = {
-            # Meta-parameters (fixed choices)
-            "model__objective": trial.suggest_categorical(
-                "model__objective", ["binary"]
-            ),
-            "model__metric": trial.suggest_categorical(
-                "model__metric", ["binary_logloss"]
-            ),
-            "model__boosting_type": trial.suggest_categorical(
-                "model__boosting_type", ["gbdt"]
-            ),
-            "model__verbosity": trial.suggest_categorical("model__verbosity", [-1]),
-            "model__random_state": trial.suggest_categorical(
-                "model__random_state", [cfg["random_state"]]
-            ),
-            # Hyper-parameters (to be tuned)
-            "model__num_leaves": trial.suggest_int(
-                "model__num_leaves", cfg["num_leaves"]["low"], cfg["num_leaves"]["high"]
-            ),
-            "model__learning_rate": trial.suggest_float(
-                "model__learning_rate",
-                cfg["learning_rate"]["low"],
-                cfg["learning_rate"]["high"],
-                log=cfg["learning_rate"]["log"],
-            ),
-            "model__feature_fraction": trial.suggest_float(
-                "model__feature_fraction",
-                cfg["feature_fraction"]["low"],
-                cfg["feature_fraction"]["high"],
-            ),
-            "model__bagging_fraction": trial.suggest_float(
-                "model__bagging_fraction",
-                cfg["bagging_fraction"]["low"],
-                cfg["bagging_fraction"]["high"],
-            ),
-            "model__bagging_freq": trial.suggest_int(
-                "model__bagging_freq",
-                cfg["bagging_freq"]["low"],
-                cfg["bagging_freq"]["high"],
-            ),
-            "model__min_child_samples": trial.suggest_int(
-                "model__min_child_samples",
-                cfg["min_child_samples"]["low"],
-                cfg["min_child_samples"]["high"],
-            ),
-        }
+        # copy base params for each trial
+        trial_params = params.copy()
+
+        for name, spec in tp_cfg.items():
+            if name in ("n_trials", "random_state"):
+                continue
+            if isinstance(spec, dict) and "low" in spec and "high" in spec:
+                low, high = spec["low"], spec["high"]
+                if isinstance(low, int) and isinstance(high, int):
+                    trial_params[name] = trial.suggest_int(name, low, high)
+                else:
+                    log_flag = bool(spec.get("log", False))
+                    trial_params[name] = trial.suggest_float(
+                        name, low, high, log=log_flag
+                    )
 
         model_pipeline = Pipeline(
             [
                 ("feature_engineering", feature_engineering),
-                ("model", LGBMClassifier()),
+                ("model", ModelClass(**trial_params)),
             ]
-        ).set_params(**params)
+        )
 
         model_pipeline.fit(X_train, y_train.values.ravel())
         return model_pipeline.score(X_val, y_val.values.ravel())
@@ -201,12 +179,16 @@ def train_final_model(  # noqa
     y_train: pd.Series,
     X_val: pd.DataFrame,
     y_val: pd.Series,
-    best_params: dict[str, float],
+    best_params: dict[str, object],
+    cfg: dict[str, object],
 ) -> tuple[Pipeline, float]:
-    """Build the final LightGBM pipeline, fit it, and report validation accuracy.
+    """Build the final model pipeline from config and tuned params, fit it, and report validation accuracy.
 
-    The pipeline combines the previously created 'feature_engineering'
-    transformer with an LGBMClassifier initialised by 'best_params'.
+    Description:
+        1. Dynamically load the model class from cfg["model"]["class"].
+        2. Merge cfg["model"]["init_params"] with best_params.
+        3. Construct a Pipeline([("feature_engineering", ...), ("model", ModelClass(**merged_params))]).
+        4. Fit and evaluate on the validation split.
 
     Args:
         feature_engineering: Transformer that one-hot-encodes categorical
@@ -216,19 +198,28 @@ def train_final_model(  # noqa
         X_val: Validation features.
         y_val: Validation target.
         best_params: Hyper-parameters returned by 'tune_hyperparameters'.
+        cfg: Full parameters dict loaded from YAML (contains "model" section).
 
     Returns:
         tuple:
             * model_pipeline - fitted pipeline ready for inference;
             * val_accuracy - accuracy on the validation split.
     """
+    # 1. Import model class dynamically
+    module_name, class_name = cfg["model"]["class"].rsplit(".", 1)
+    ModelClass = getattr(importlib.import_module(module_name), class_name)
+
+    # 2. Prepare constructor params
+    init_params = dict(cfg["model"].get("init_params", {}))
+    model_params = {**init_params, **best_params}
+
+    # 3. Build and fit pipeline
     model_pipeline = Pipeline(
         [
             ("feature_engineering", feature_engineering),
-            ("model", LGBMClassifier()),
+            ("model", ModelClass(**model_params)),
         ]
-    ).set_params(**best_params)
-
+    )
     model_pipeline.fit(X_train, y_train.values.ravel())
     val_accuracy = model_pipeline.score(X_val, y_val.values.ravel())
 
