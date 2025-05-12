@@ -1,29 +1,45 @@
-"""Project settings. There is no need to edit this file unless you want to change values
-from the Kedro defaults. For further information, including these default values, see
-https://docs.kedro.org/en/stable/kedro_project_setup/settings.html."""
+"""Project settings: dynamic catalog registration."""
+from pathlib import Path
 
-# Instantiated project hooks.
-#from kedro_pro.hooks import SparkHooks  # noqa: E402
-
-# Hooks are executed in a Last-In-First-Out (LIFO) order.
-#HOOKS = (SparkHooks(),)
-
-# Installed plugins for which to disable hook auto-registration.
-# DISABLE_HOOKS_FOR_PLUGINS = ("kedro-viz",)
-
-# Class that manages storing KedroSession data.
-# from kedro.framework.session.store import BaseSessionStore
-# SESSION_STORE_CLASS = BaseSessionStore
-# Keyword arguments to pass to the `SESSION_STORE_CLASS` constructor.
-# SESSION_STORE_ARGS = {
-#     "path": "./sessions"
-# }
-
-# Directory that holds configuration.
-# CONF_SOURCE = "conf"
-
-# Class that manages how configuration is loaded.
+import yaml
+from kedro.framework.hooks import hook_impl
+from kedro.io import DataCatalog, MemoryDataset
+from kedro-datasets import CSVDataset, PickleDataset
 from kedro.config import OmegaConfigLoader  # noqa: E402
+
+
+class RegisterDynamicDatasets:
+    """Hook: add model-specific outputs into DataCatalog."""
+
+    @hook_impl
+    def register_catalog(self, catalog: DataCatalog) -> DataCatalog:
+        # 1. read parameter file
+        conf_base = Path(__file__).resolve().parents[2] / "conf" / "base"
+        with open(conf_base / "parameters_model_training.yml", encoding="utf-8") as fp:
+            params: dict[str, object] = yaml.safe_load(fp)
+
+        for model_key in params["models"]:
+            suffix = model_key.lower()
+
+            # best model pickle
+            catalog.add(
+                f"best_model_{suffix}",
+                PickleDataset(filepath=f"data/06_models/{suffix}_model.pkl"),
+            )
+
+            # validation accuracy kept in memory
+            catalog.add(f"val_accuracy_{suffix}", MemoryDataset())
+
+            # optional test predictions
+            catalog.add(
+                f"y_pred_{suffix}",
+                CSVDataset(filepath=f"data/07_model_output/{suffix}_pred.csv"),
+            )
+
+        return catalog
+
+# Kedro discovers hooks via this iterable
+HOOKS = (RegisterDynamicDatasets(),)
 
 CONFIG_LOADER_CLASS = OmegaConfigLoader
 # Keyword arguments to pass to the `CONFIG_LOADER_CLASS` constructor.
@@ -34,11 +50,3 @@ CONFIG_LOADER_ARGS = {
         "spark": ["spark*", "spark*/**"],
     }
 }
-
-# Class that manages Kedro's library components.
-# from kedro.framework.context import KedroContext
-# CONTEXT_CLASS = KedroContext
-
-# Class that manages the Data Catalog.
-# from kedro.io import DataCatalog
-# DATA_CATALOG_CLASS = DataCatalog

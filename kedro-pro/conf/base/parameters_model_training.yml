@@ -1,34 +1,84 @@
-model:
-  # Full import path to the model class
-  class: lightgbm.LGBMClassifier
-  # Default constructor parameters for the model
-  init_params:
-    objective: binary
-    metric: binary_logloss
-    boosting_type: gbdt
-    verbosity: -1
+models:
+  LightGBM:
+    class: lightgbm.LGBMClassifier
+    init_params:                         # default constructor params
+      objective: binary
+      metric: binary_logloss
+      boosting_type: gbdt
+      verbosity: -1
+      random_state: 42
+    tune_hyperparameters:               
+      n_trials: 100
+      random_state: 42
+      num_leaves:        {low: 10,   high: 100}
+      max_depth:         {low: -1,  high: 16}
+      learning_rate:     {low: 0.01, high: 0.1, log: true}
+      feature_fraction:  {low: 0.2, high: 1.0}
+      bagging_fraction:  {low: 0.1, high: 1.0}
+      bagging_freq:      {low: 1,   high: 10}
+      min_child_samples: {low: 1,   high: 50}
 
-tune_hyperparameters:
-  n_trials: 100
-  random_state: 42
+  RandomForest:
+    class: sklearn.ensemble.RandomForestClassifier
+    init_params:
+      n_estimators: 200
+      n_jobs: -1
+      random_state: 42
+    tune_hyperparameters:
+      n_trials: 100
+      random_state: 42
+      n_estimators:        {low: 100, high: 1000}
+      max_depth:           {low: 3,   high: 30}
+      min_samples_split:   {low: 2,   high: 20}
+      min_samples_leaf:    {low: 1,   high: 10}
+      max_features:        {low: 0.3, high: 1.0}
+      bootstrap:           {low: 0,   high: 1}      # 0=False, 1=True
 
-  # Parameter ranges for tuning
-  num_leaves:
-    low: 10
-    high: 100
-  learning_rate:
-    low: 0.01
-    high: 0.1
-    log: true
-  feature_fraction:
-    low: 0.1
-    high: 1.0
-  bagging_fraction:
-    low: 0.1
-    high: 1.0
-  bagging_freq:
-    low: 1
-    high: 10
-  min_child_samples:
-    low: 1
-    high: 50
+  LogisticRegression:
+    class: sklearn.linear_model.LogisticRegression
+    init_params:
+      solver: liblinear
+      random_state: 42
+      max_iter: 1000
+    tune_hyperparameters:
+      n_trials: 25
+      random_state: 42
+      C:              {low: 0.001, high: 100.0, log: true}
+      penalty_l1:     {low: 0,     high: 1}         # 0='l2', 1='l1'
+      l1_ratio:       {low: 0.0,   high: 1.0}
+
+# -----------------------------------------------------------------------------
+# model:
+#   # Full import path to the model class
+#   class: lightgbm.LGBMClassifier
+#   # Default constructor parameters for the model
+#   init_params:
+#     objective: binary
+#     metric: binary_logloss
+#     boosting_type: gbdt
+#     verbosity: -1
+
+# tune_hyperparameters:
+#   n_trials: 100
+#   random_state: 42
+
+#   # Parameter ranges for tuning
+#   num_leaves:
+#     low: 10
+#     high: 100
+#   learning_rate:
+#     low: 0.01
+#     high: 0.1
+#     log: true
+#   feature_fraction:
+#     low: 0.1
+#     high: 1.0
+#   bagging_fraction:
+#     low: 0.1
+#     high: 1.0
+#   bagging_freq:
+#     low: 1
+#     high: 10
+#   min_child_samples:
+#     low: 1
+#     high: 50

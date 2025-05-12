@@ -108,37 +108,33 @@ def tune_hyperparameters(  # noqa
 
     Description:
         1. Load n_trials and random_state from config.
-        2. Import model class from full path in config.
-        3. Use init_params as base, then suggest ranges from tune_hyperparameters.
+        2.Start with cfg["init_params"] as base.
+        3. Build search space from cfg["tune_hyperparameters"].
         4. Run Optuna study and return merged best_params.
 
     Args:
-        feature_engineering: Fully configured ColumnTransformer that
-            handles one-hot encoding and feature scaling.
-        X_train: Training features.
-        y_train: Training target.
-        X_val: Validation features.
-        y_val: Validation target.
-        cfg: Dictionary loaded from parameters_model_training.yml.
+        feature_engineering: Preprocessing transformer.
+        X_train, y_train: Training split.
+        X_val, y_val: Validation split.
+        cfg: Dict with 'class', 'init_params', 'tune_hyperparameters'.
 
     Returns:
-        dict[str, object]: A dict with both init_params and tuned hyperparameters.
+        dict[str, object]: Mapping of hyper-parameters giving best validation score.
     """
-    model_cfg = cfg["model"]
+    # --- 1. unpack config --------------------------------------------------
+    model_path: str = cfg["class"]              # import path
+    init_params: dict[str, object] = cfg.get("init_params", {})
     tp_cfg = cfg["tune_hyperparameters"]
     n_trials = tp_cfg.get("n_trials")
     random_state = tp_cfg.get("random_state")
 
-    # import model class dynamically
-    module_name, class_name = model_cfg["class"].rsplit(".", 1)
+    # --- 2. dynamic import -------------------------------------------------
+    module_name, class_name = model_path.rsplit(".", 1)
     ModelClass = getattr(importlib.import_module(module_name), class_name)
-
-    # base init parameters
-    params = dict(model_cfg.get("init_params", {}))
 
     def objective(trial: optuna.Trial) -> float:
         # copy base params for each trial
-        trial_params = params.copy()
+        trial_params = init_params.copy()
 
         for name, spec in tp_cfg.items():
             if name in ("n_trials", "random_state"):
@@ -163,6 +159,7 @@ def tune_hyperparameters(  # noqa
         model_pipeline.fit(X_train, y_train.values.ravel())
         return model_pipeline.score(X_val, y_val.values.ravel())
 
+    # --- 4. run study ------------------------------------------------------
     optuna.logging.set_verbosity(optuna.logging.WARNING)
     study = optuna.create_study(
         direction="maximize",
@@ -198,7 +195,7 @@ def train_final_model(  # noqa
         X_val: Validation features.
         y_val: Validation target.
         best_params: Hyper-parameters returned by 'tune_hyperparameters'.
-        cfg: Full parameters dict loaded from YAML (contains "model" section).
+        cfg: Same branch dict used for tuning.
 
     Returns:
         tuple:
@@ -206,11 +203,11 @@ def train_final_model(  # noqa
             * val_accuracy - accuracy on the validation split.
     """
     # 1. Import model class dynamically
-    module_name, class_name = cfg["model"]["class"].rsplit(".", 1)
+    module_name, class_name = cfg["class"].rsplit(".", 1)
     ModelClass = getattr(importlib.import_module(module_name), class_name)
 
     # 2. Prepare constructor params
-    init_params = dict(cfg["model"].get("init_params", {}))
+    init_params = dict(cfg.get("init_params", {}))
     model_params = {**init_params, **best_params}
 
     # 3. Build and fit pipeline
