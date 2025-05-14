@@ -7,7 +7,6 @@ Multi-model training pipeline.
    • Run Optuna tuning.
    • Fit final model.
 """
-from kedro.config import OmegaConfigLoader
 from pathlib import Path
 
 import yaml
@@ -29,15 +28,6 @@ def _get_model_keys() -> list[str]:
      with open(params_path, encoding="utf-8") as fp:
         MODELS = list(yaml.safe_load(fp)["models"].keys())
         return MODELS
-    #  conf_paths = [str(Path.cwd()/"conf")]
-    #  loader = OmegaConfigLoader(conf_source=conf_paths)
-    #  params = loader.get("parameters_model_training")
-    #  return list(params["models"].keys())
-
-# Helper: read conf/base/parameters_model_training.yml to get model list
-# PARAMS_FILE = Path(__file__).resolve().parents[4] / "conf" / "base" / "parameters_model_training.yml"
-# with open(PARAMS_FILE, encoding="utf-8") as fp:
-#     MODELS = list(yaml.safe_load(fp)["models"].keys())
 
 def _make_model_nodes(model_key: str) -> list[node]:
     """Return tuning & training nodes for a single model."""
@@ -118,37 +108,3 @@ def create_pipeline(**kwargs) -> Pipeline:
         inputs=["clean_train"],
         parameters={f"models.{m}" for m in models},
     )
-
-    # return pipeline(
-    #     [    #         node(
-    #             func=tune_hyperparameters,
-    #             inputs=[
-    #                 "feature_engineering",
-    #                 "X_train",
-    #                 "y_train",
-    #                 "X_val",
-    #                 "y_val",
-    #                 #"parameters_model_training",
-    #                 "params:models.LightGBM",
-    #             ],
-    #             outputs="best_params",
-    #             name="tune_hyperparameters",
-    #             tags=("tuning",),
-    #         ),
-    #         node(
-    #             func=train_final_model,
-    #             inputs=[
-    #                 "feature_engineering",
-    #                 "X_train",
-    #                 "y_train",
-    #                 "X_val",
-    #                 "y_val",
-    #                 "best_params",
-    #                 #"parameters_model_training",
-    #                 "params:models.LightGBM",
-    #             ],
-    #             outputs=["best_model", "val_accuracy"],
-    #             name="train_final_model",
-    #             tags=("train",),
-    #         ),
-    #     ],

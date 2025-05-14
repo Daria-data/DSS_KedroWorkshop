@@ -25,74 +25,67 @@ from .nodes import (
     shap_bar_plot,
 )
 
+MODEL_KEYS = ["LightGBM", "RandomForest"]
 
-def create_pipeline(**kwargs) -> Pipeline:  # noqa: D401
+def _make_eval_nodes(model_key: str) -> list[node]:
+    """Return evaluation nodes for one model suffix."""
+    sfx = f"_{model_key.lower()}"
+
+    return [
+        # 1. Preparation
+        node(
+            transform_test_set,
+            inputs=[f"best_model{sfx}", "X_test"],
+            outputs=[f"X_test_transformed{sfx}", f"model{sfx}"],
+            name=f"transform_test_set{sfx}",
+        ),
+        # 2. Metrics
+        node(
+            predict_and_metrics,
+            inputs=[f"model{sfx}", f"X_test_transformed{sfx}", "y_test"],
+            outputs=[f"cm{sfx}", f"auc_score{sfx}", f"fpr{sfx}", f"tpr{sfx}"],
+            name=f"predict_and_metrics{sfx}",
+        ),
+        # 3. Confusion-matrix heatmap
+        node(
+            plot_confusion_matrix,
+            inputs=f"cm{sfx}",
+            outputs=f"confusion_matrix_plot{sfx}",
+            name=f"plot_confusion_matrix{sfx}",
+        ),
+        # 4. ROC curve
+        node(
+            plot_roc_curve,
+            inputs=[f"fpr{sfx}", f"tpr{sfx}", f"auc_score{sfx}"],
+            outputs=f"roc_curve_plot{sfx}",
+            name=f"plot_roc_curve{sfx}",
+        ),
+        # 5. SHAP values
+        node(
+            interpret_model,
+            inputs=[f"model{sfx}", f"X_test_transformed{sfx}"],
+            outputs=f"shap_values{sfx}",
+            name=f"interpret_model{sfx}",
+        ),
+        # 6. SHAP plots
+        node(
+            shap_summary_plot,
+            inputs=[f"shap_values{sfx}", f"X_test_transformed{sfx}"],
+            outputs=f"shap_summary_plot{sfx}",
+            name=f"shap_summary_plot{sfx}",
+        ),
+        node(
+            shap_bar_plot,
+            inputs=[f"shap_values{sfx}", f"X_test_transformed{sfx}"],
+            outputs=f"shap_bar_plot{sfx}",
+            name=f"shap_bar_plot{sfx}",
+        ),
+    ]
+
+def create_pipeline(**kwargs) -> pipeline:  # noqa: D401
     """Assemble the model_evaluation pipeline grouped under the model_evaluation namespace."""
-    return pipeline(
-        [
-            # ───── preparation ──────────────────────────────────────
-            node(
-                func=transform_test_set,
-                inputs=["best_model", "X_test"],
-                outputs=["X_test_transformed", "model"],
-                name="transform_test_set",
-                tags=("prep",),
-            ),
-            # ───── metrics ───────────────────────────────────────────
-            node(
-                func=predict_and_metrics,
-                inputs=["model", "X_test_transformed", "y_test"],
-                outputs=["cm", "auc_score", "fpr", "tpr"],
-                name="predict_and_metrics",
-                tags=("metrics",),
-            ),
-            # ───── plots: confusion matrix & ROC ─────────────────────
-            node(
-                func=plot_confusion_matrix,
-                inputs="cm",
-                outputs="confusion_matrix_plot",
-                name="plot_confusion_matrix",
-                tags=("plot", "cm"),
-            ),
-            node(
-                func=plot_roc_curve,
-                inputs=["fpr", "tpr", "auc_score"],
-                outputs="roc_curve_plot",
-                name="plot_roc_curve",
-                tags=("plot", "roc"),
-            ),
-            # ───── SHAP values and plots ─────────────────────────────
-            node(
-                func=interpret_model,
-                inputs=["model", "X_test_transformed"],
-                outputs="shap_values",
-                name="interpret_model",
-                tags=("shap",),
-            ),
-            node(
-                func=shap_summary_plot,
-                inputs=["shap_values", "X_test_transformed"],
-                outputs="shap_summary_plot",
-                name="shap_summary_plot",
-                tags=("plot", "shap"),
-            ),
-            node(
-                func=shap_bar_plot,
-                inputs=["shap_values", "X_test_transformed"],
-                outputs="shap_bar_plot",
-                name="shap_bar_plot",
-                tags=("plot", "shap"),
-            ),
-        ],
-        namespace="model_evaluation",
-        inputs=["best_model", "X_test", "y_test"],
-        outputs=[
-            "cm",
-            "auc_score",
-            "confusion_matrix_plot",
-            "roc_curve_plot",
-            "shap_values",
-            "shap_summary_plot",
-            "shap_bar_plot",
-        ],
-    )
+    nodes: list[node] = []
+    for key in MODEL_KEYS:
+        nodes.extend(_make_eval_nodes(key))
+
+    return pipeline(nodes, namespace="model_evaluation")
