@@ -6,6 +6,7 @@ from kedro.framework.hooks import hook_impl
 from kedro.io import DataCatalog, MemoryDataset
 from kedro_datasets.pandas import CSVDataset
 from kedro_datasets.pickle import PickleDataset
+from kedro_datasets.json import JSONDataset
 from kedro.config import OmegaConfigLoader  # noqa: E402
 
 
@@ -22,20 +23,31 @@ class RegisterDynamicDatasets:
         for model_key in params["models"]:
             suffix = model_key.lower()
 
-            # best model pickle
-            catalog.add(
-                f"best_model_{suffix}",
-                PickleDataset(filepath=f"data/06_models/{suffix}_model.pkl"),
-            )
+            def _add(name: str, dataset):
+                key = f"{name}_{suffix}"
+                if key not in catalog:          # avoid silent overwrite
+                    catalog.add(key, dataset, replace=True)
 
-            # validation accuracy kept in memory
-            catalog.add(f"val_accuracy_{suffix}", MemoryDataset())
+            _add("best_model", PickleDataset(filepath=f"data/06_models/{suffix}_model.pkl"))
+            #_add("val_accuracy", MemoryDataset())
+            _add("val_accuracy", JSONDataset(filepath=f"data/08_reporting/val_accuracy_{suffix}.json"))
+            _add("y_pred", CSVDataset(filepath=f"data/07_model_output/{suffix}_pred.csv"))
 
-            # optional test predictions
-            catalog.add(
-                f"y_pred_{suffix}",
-                CSVDataset(filepath=f"data/07_model_output/{suffix}_pred.csv"),
-            )
+
+            # # best model pickle
+            # catalog.add(
+            #     f"best_model_{suffix}",
+            #     PickleDataset(filepath=f"data/06_models/{suffix}_model.pkl"),
+            # )
+
+            # # validation accuracy kept in memory
+            # catalog.add(f"val_accuracy_{suffix}", MemoryDataset())
+
+            # # optional test predictions
+            # catalog.add(
+            #     f"y_pred_{suffix}",
+            #     CSVDataset(filepath=f"data/07_model_output/{suffix}_pred.csv"),
+            # )
 
         return catalog
 

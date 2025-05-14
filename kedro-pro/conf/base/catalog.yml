@@ -48,24 +48,48 @@ model_training.y_val:
     kedro-viz:
       layer: model inputs
 
-model_training.best_params:
+model_training.best_params_lightgbm:
   type: json.JSONDataset
-  filepath: data/05_model_input/best_params.json
+  filepath: data/05_model_input/best_params_lightgbm.json
   save_args: {indent: 2}
   metadata:
     kedro-viz:
       layer: model inputs
 
-best_model:        # already external 
+model_training.best_params_randomforest:
+  type: json.JSONDataset
+  filepath: data/05_model_input/best_params_randomforest.json
+  save_args: {indent: 2}
+  metadata:
+    kedro-viz:
+      layer: model inputs
+
+# ───── model_training outputs ─────
+model_training.best_model_lightgbm:
   type: pickle.PickleDataset
-  filepath: data/06_models/best_model.pkl
+  filepath: data/06_models/lightgbm_model.pkl
   metadata:
     kedro-viz:
       layer: model
 
-val_accuracy:
+model_training.val_accuracy_lightgbm:
   type: json.JSONDataset
-  filepath: data/08_reporting/val_accuracy.json
+  filepath: data/08_reporting/val_accuracy_lightgbm.json
+  save_args: {indent: 2}
+  metadata:
+    kedro-viz:
+      layer: reporting
+
+model_training.best_model_randomforest:
+  type: pickle.PickleDataset
+  filepath: data/06_models/randomforest_model.pkl
+  metadata:
+    kedro-viz:
+      layer: model
+
+model_training.val_accuracy_randomforest:
+  type: json.JSONDataset
+  filepath: data/08_reporting/val_accuracy_randomforest.json
   save_args: {indent: 2}
   metadata:
     kedro-viz:
@@ -86,63 +110,102 @@ y_test:
       layer: model inputs
 
 # ───────── model_evaluation outputs ─────────
-cm:
+model_evaluation.cm_lightgbm:
   type: pickle.PickleDataset
-  filepath: data/07_evaluation/confusion_matrix.pkl
+  filepath: data/07_evaluation/cm_lightgbm.pkl
   metadata:
     kedro-viz:
-      layer: evaluation
+      layer: reporting
 
-auc_score:
+model_evaluation.auc_score_lightgbm:
   type: json.JSONDataset
-  filepath: data/07_evaluation/auc_score.json
-  save_args:
-    indent: 2
-  metadata:
-    kedro-viz:
-      layer: evaluation
-
-confusion_matrix_plot:
-  type: matplotlib.MatplotlibWriter
-  filepath: data/08_reporting/confusion_matrix.png
+  filepath: data/07_evaluation/auc_score_lightgbm.json
+  save_args: {indent: 2}
   metadata:
     kedro-viz:
       layer: reporting
 
-roc_curve_plot:
+model_evaluation.confusion_matrix_plot_lightgbm:
   type: matplotlib.MatplotlibWriter
-  filepath: data/08_reporting/roc_curve.png
-  save_args:
-    format: png
+  filepath: data/08_reporting/confusion_matrix_lightgbm.png
   metadata:
     kedro-viz:
       layer: reporting
 
-shap_values:
+model_evaluation.roc_curve_plot_lightgbm:
+  type: matplotlib.MatplotlibWriter
+  filepath: data/08_reporting/roc_curve_lightgbm.png
+  metadata:
+    kedro-viz:
+      layer: reporting
+
+model_evaluation.shap_values_lightgbm:
   type: pickle.PickleDataset
-  filepath: data/07_evaluation/shap_values.pkl
-  metadata:
-    kedro-viz:
-      layer: evaluation
-
-shap_summary_plot:
-  type: matplotlib.MatplotlibWriter
-  filepath: data/08_reporting/shap_summary.png
-  save_args:
-    format: png
+  filepath: data/07_evaluation/shap_values_lightgbm.pkl
   metadata:
     kedro-viz:
       layer: reporting
 
-shap_bar_plot:
+model_evaluation.shap_summary_plot_lightgbm:
   type: matplotlib.MatplotlibWriter
-  filepath: data/08_reporting/shap_bar.png
-  save_args:
-    format: png
+  filepath: data/08_reporting/shap_summary_lightgbm.png
   metadata:
     kedro-viz:
       layer: reporting
 
-model_training.parameters_model_training:
-  type: yaml.YAMLDataset
-  filepath: conf/base/parameters_model_training.yml
+model_evaluation.shap_bar_plot_lightgbm:
+  type: matplotlib.MatplotlibWriter
+  filepath: data/08_reporting/shap_bar_lightgbm.png
+  metadata:
+    kedro-viz:
+      layer: reporting
+
+model_evaluation.cm_randomforest:
+  type: pickle.PickleDataset
+  filepath: data/07_evaluation/cm_randomforest.pkl
+  metadata:
+    kedro-viz:
+      layer: reporting
+
+model_evaluation.auc_score_randomforest:
+  type: json.JSONDataset
+  filepath: data/07_evaluation/auc_score_randomforest.json
+  save_args: {indent: 2}
+  metadata:
+    kedro-viz:
+      layer: reporting
+
+model_evaluation.confusion_matrix_plot_randomforest:
+  type: matplotlib.MatplotlibWriter
+  filepath: data/08_reporting/confusion_matrix_randomforest.png
+  metadata:
+    kedro-viz:
+      layer: reporting
+
+model_evaluation.roc_curve_plot_randomforest:
+  type: matplotlib.MatplotlibWriter
+  filepath: data/08_reporting/roc_curve_randomforest.png
+  metadata:
+    kedro-viz:
+      layer: reporting
+
+model_evaluation.shap_values_randomforest:
+  type: pickle.PickleDataset
+  filepath: data/07_evaluation/shap_values_randomforest.pkl
+  metadata:
+    kedro-viz:
+      layer: reporting
+
+model_evaluation.shap_summary_plot_randomforest:
+  type: matplotlib.MatplotlibWriter
+  filepath: data/08_reporting/shap_summary_randomforest.png
+  metadata:
+    kedro-viz:
+      layer: reporting
+
+model_evaluation.shap_bar_plot_randomforest :
+  type: matplotlib.MatplotlibWriter
+  filepath: data/08_reporting/shap_bar_randomforest.png
+  metadata:
+    kedro-viz:
+      layer: reporting

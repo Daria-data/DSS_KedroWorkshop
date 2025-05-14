@@ -6,6 +6,7 @@ from lightgbm import LGBMClassifier
 from sklearn import set_config
 from sklearn.metrics import confusion_matrix, roc_auc_score, roc_curve
 from sklearn.pipeline import Pipeline
+from sklearn.base import ClassifierMixin
 
 set_config(transform_output="pandas")
 
@@ -13,7 +14,7 @@ set_config(transform_output="pandas")
 def transform_test_set(
     model_pipeline: Pipeline,
     X_test: pd.DataFrame,
-) -> tuple[pd.DataFrame, LGBMClassifier]:
+) -> tuple[pd.DataFrame, ClassifierMixin]:
     """Apply the feature-engineering step to X_test.
 
     Args:
@@ -128,7 +129,7 @@ def plot_roc_curve(
 
 
 def interpret_model(
-    model: LGBMClassifier,
+    model: ClassifierMixin,
     X_test_transformed: pd.DataFrame,
 ) -> np.ndarray:
     """Calculate SHAP values for X_test using the LightGBM estimator.
@@ -140,12 +141,23 @@ def interpret_model(
     Returns:
         2-D numpy array of SHAP values (shape = n_samples * n_features, same shape as X_test).
     """
-    booster = model.booster_
-    if "objective" not in booster.params:
-        booster.params["objective"] = model.get_params().get("objective", "binary")
-    explainer = shap.TreeExplainer(booster)
-    shap_values = explainer.shap_values(X_test_transformed)
-    return shap_values
+    try:
+        #  LightGBM
+        if isinstance(model, LGBMClassifier):
+            booster = model.booster_
+            booster.params.setdefault(
+                "objective", model.get_params().get("objective", "binary")
+            )
+            explainer = shap.TreeExplainer(booster)
+            return explainer.shap_values(X_test_transformed)  # type: ignore[return-value]
+
+        #  Generic tree estimators (RandomForest, XGB…)
+        explainer = shap.TreeExplainer(model)
+        return explainer.shap_values(X_test_transformed)  # type: ignore[return-value]
+
+    except (AttributeError, ValueError, TypeError):
+        # Model type not supported by TreeExplainer
+        return np.empty((0, 0))
 
 
 def shap_summary_plot(
@@ -161,7 +173,8 @@ def shap_summary_plot(
     Returns:
         Matplotlib figure with the summary plot.
     """
-    shap.summary_plot(shap_values, X_test_transformed, show=False, plot_size=0.2)
+    if shap_values.size:
+        shap.summary_plot(shap_values, X_test_transformed, show=False, plot_size=0.2)
     return plt.gcf()
 
 
@@ -178,7 +191,6 @@ def shap_bar_plot(
     Returns:
         Matplotlib figure with the bar plot.
     """
-    shap.summary_plot(
-        shap_values, X_test_transformed, plot_type="bar", show=False, plot_size=0.2
-    )
+    if shap_values.size:
+        shap.summary_plot(shap_values, X_test_transformed, plot_type="bar", show=False, plot_size=0.2)
     return plt.gcf()
